@@ -1,0 +1,408 @@
+﻿@model MealPlan
+@{
+    ViewBag.Title = "New Planning";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    DateTime today = DateTime.Now;
+}
+
+
+<link rel="stylesheet" href="~/css/asyncbutton.css" />
+<style>
+    a:hover {
+        cursor: pointer;
+    }
+
+    .label-font {
+        font-family: 'Comic Sans MS';
+    }
+
+    .card-title {
+        display: -webkit-box;
+        -webkit-line-clamp: 1; /* Maximum number of lines to show */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+<hr />
+<div class="container-fluid b-5">
+    <div class="rounded-3 bg-white border border-dark border-2" style="background-color: #e7f9fd;">
+        <form asp-action="Create" id="recipe-form" class="p-5">
+            <h1 class="text-center mb-5 text-dark label-font">New Planning</h1>
+            <div asp-validation-summary="ModelOnly" class="text-danger text-color-change-red"></div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label mb-2 label-font">Title</label>
+                <input asp-for="Title" class="form-control" placeholder="e.g. Recipes to make for mother's day" required />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-4">
+                <label asp-for="Description" class="control-label mb-2 label-font">Description</label>
+                <textarea asp-for="Description" class="form-control" placeholder="e.g. Make Mom happy with a homemade goodie or meal."></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-4">
+                <label asp-for="Color" class="control-label mb-2 label-font">Choose a custom color for this planning</label>
+                <select asp-for="Color" class="form-control" required>
+                    <option value="green">Green</option>
+                    <option value="blue">Blue</option>
+                    <option value="violet">Violet</option>
+                    <option value="pink">Pink</option>
+                    <option value="orange">Orange</option>
+                    <option value="yellow">Yellow</option>
+                    <option value="cyan">Cyan</option>
+                    <option value="magenta">Magenta</option>
+                    <option value="purple">Purple</option>
+                    <option value="brown">Brown</option>
+                    <option value="ivory">Ivory</option>
+                    <option value="gold">Gold</option>
+                    <option value="skyblue">Skyblue</option>
+                    <option value="coral">Coral</option>
+                    <option value="tomato">Tomato</option>
+                    <option value="lavender">Lavender</option>
+                    <option value="plum">Plum</option>
+                    <option value="lime">Lime</option>
+                    <option value="gray">Gray</option>
+                </select>
+            </div>
+            <div class="form-group form-check form-switch mt-4">
+                <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                <label class="form-check-label" for="flexSwitchCheckDefault">Weekly planning</label>
+            </div>
+            <div class="form-group mt-4" id="menu1">
+                <label class="control-label mb-2 label-font">Select the days for the weekly planning</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="selectedDays[]" id="checkMonday" value="Monday">
+                    <label class="form-check-label" for="checkMonday">Monday</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="selectedDays[]" id="checkTuesday" value="Tuesday">
+                    <label class="form-check-label" for="checkTuesday">Tuesday</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="selectedDays[]" id="checkWednesday" value="Wednesday">
+                    <label class="form-check-label" for="checkWednesday">Wednesday</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="selectedDays[]" id="checkThursday" value="Thursday">
+                    <label class="form-check-label" for="checkThursday">Thursday</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="selectedDays[]" id="checkFriday" value="Friday">
+                    <label class="form-check-label" for="checkFriday">Friday</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="selectedDays[]" id="checkSaturday" value="Saturday">
+                    <label class="form-check-label" for="checkSaturday">Saturday</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="selectedDays[]" id="checkSunday" value="Sunday">
+                    <label class="form-check-label" for="checkSunday">Sunday</label>
+                </div>
+                <div class="form-group mt-3">
+                    <label class="control-label mb-2 label-font">Start date</label>
+                    <input class="form-control" name="startDate" type="date" min="@today.ToString("yyyy-MM-dd")" />
+                </div>
+                <div class="form-group mt-3">
+                    <label class="control-label mb-2 label-font">How many week(s) does this plan last?</label>
+                    <input type="number" class="form-control" required min="1" max="100" name="weekLast" />
+                    <span class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group mt-4" id="menu2">
+                <label asp-for="Date" class="control-label mb-2 label-font">Pick a time</label>
+                <input type="date" class="form-control" asp-for="Date" value="@today.ToString("yyyy-MM-dd")" min="@today.ToString("yyyy-MM-dd")" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-4">
+                <label for="dietaries" class="control-label mb-2 label-font">Choose dietary needs (Optional)</label>
+                <select id="dietaries" class="form-control">
+                    <option value="none">None</option>
+                    <option value="highcalorie">High-calorie</option>
+                    <option value="lowcalorie">Low-calorie</option>
+                    <option value="highprotein">High-protein</option>
+                    <option value="lowprotein">Low-protein</option>
+                    <option value="highfibre">High-fibre</option>
+                    <option value="lowfibre">Low-fibre</option>
+                    <option value="highcarb">High-carbohydrate</option>
+                    <option value="lowcarb">Low-carbohydrate</option>
+                    <option value="highfat">High-fat</option>
+                    <option value="lowfat">Low-fat</option>
+                </select>
+                <p class="text-center mt-4 label-font fs-5">Our suggestions</p>
+                <div id="recipeList" class="d-flex">
+                </div>
+            </div>
+            <!-- Ingredient -->
+            <div id="recipe-container" class="mt-5">
+                <!-- Initial ingredient select element -->
+                <p class="text-center text-dark fw-bolder fs-2 label-font">Choose recipes</p>
+                <p class="text-center text-secondary fw-bolder fs-6 label-font">Please ensure to verify the recipe ID prior to selecting the recipe name, in order to guarantee precise recipe selection.</p>
+                <div class="form-group row mt-4">
+                    <div class="col-md-10">
+                        <label for="RecipeName" class="mb-2 label-font">(#ID)Name</label>
+                        <input type="text" class="form-control recipes" onchange="updateSpan(this.value,this)" required />
+                        <span id="recipe-span-1" class="text-danger" style="display: none;">This recipe doesn't exist!</span>
+                    </div>
+                    <div class="col-md-2" style="margin-top: 3%;">
+                        <a onclick="removeRecipe(this)" class="text-decoration-none text-danger ms-3 fw-bolder fs-4"><i class="fa-solid fa-trash-can"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3">
+                <a onclick="addRecipe()" class="text-decoration-none text-success label-font">Add Recipe <i class="fa-solid fa-plus"></i></a>
+            </div>
+            <div id="hidden-inputs-container"></div>
+            <div class="form-group mt-5 text-center">
+                <div id="create-button-container" class="position-relative d-inline-block">
+                    <input type="submit" value="Create" class="btn btn-success btn-lg" id="create-button" />
+                    </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+
+<script src="~/lib/jquery-3.7.0.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+<script src="~/js/asyncbutton.js"></script>
+
+<script>
+    document.getElementById('dietaries').addEventListener('change', function () {
+        var dietary = this.value; // Get the selected dietary value
+
+        // Make an AJAX request to the server
+        console.log("AJAX FFS");
+        $.ajax({
+            url: '/MealPlan/GetDietaryRecipes',
+            type: 'POST',
+            data: { dietary: dietary },
+            success: function (data) {
+                console.log("EMPTY");
+                console.log(data);
+                $('#recipeList').empty();
+                console.log(data.length);
+                if (data.length > 0) {
+                    console.log("WORKING");
+                    $('#recipeList').append('<div class="row">');
+                    data.forEach(function (recipe) {
+                        console.log(recipe.Name);
+                        var recipeUrl = '@Url.Action("Details", "UserRecipes")' + '?id=' + recipe.Id;
+                        var recipeHtml =
+                            '<a href="' + recipeUrl + '" target="_blank" class="text-dark"><div style="height: 200px;" class="border border-1 rounded rounded-1 border-dark mt-1 mx-1">'
+                            + '<img class="img-fluid" style="height: 70%; width: 150px;" src="' + recipe.ImgPath + '">'
+                            + '<p class="card-title text-center" style="max-width: 150px;">' + recipe.Name + '</p>'
+                            + '<a onclick="addSuggestRecipe(\'' + recipe.Id + '\', \'' + recipe.Name + '\')" class="btn btn-success w-100" style="font-size: 10px;"> Add</a>'
+                            + '</div></a>';
+
+                        $('#recipeList').append(recipeHtml);
+                    });
+                    $('#recipeList').append('</div>');
+                } else {
+                    $('#recipeList').append('<p>No recipes found.</p>');
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log(xhr.responseText);
+                console.log("ERR");
+                console.log(error); // Handle the error, if any
+            }
+        });
+    });
+
+    var recipeIndex = 1;
+    function addRecipe() {
+        var container = document.getElementById('recipe-container');
+        var originalFormGroup = container.querySelector('.form-group');
+
+        var newFormGroup = originalFormGroup.cloneNode(true);
+        var newInput = newFormGroup.querySelector('input[type="text"]');
+        var newSpan = newFormGroup.querySelector('span');
+
+        // Clear the selected option in the new select element
+        newInput.value = '';
+        //changeId
+        recipeIndex++;
+        newInput.id = 'recipe-id-' + (recipeIndex);
+        newSpan.id = 'recipe-span-' + (recipeIndex);
+        // Add the new form group to the container
+        container.appendChild(newFormGroup);
+        autocomplete();
+    }
+
+    function addSuggestRecipe(recipeId, recipeName) {
+        var container = document.getElementById('recipe-container');
+        var originalFormGroup = container.querySelector('.form-group');
+
+        var newFormGroup = originalFormGroup.cloneNode(true);
+        var newInput = newFormGroup.querySelector('input[type="text"]');
+        var newSpan = newFormGroup.querySelector('span');
+
+        // Set the recipe id and name in the new input value
+        newInput.value = '(#' +recipeId + ')' + recipeName;
+        //changeId
+        recipeIndex++;
+        newInput.id = 'recipe-id-' + (recipeIndex);
+        newSpan.id = 'recipe-span-' + (recipeIndex);
+        // Add the new form group to the container
+        container.appendChild(newFormGroup);
+        autocomplete();
+    }
+
+
+    var checkbox1 = document.getElementById('flexSwitchCheckDefault');
+    var switchInput = $("#flexSwitchCheckDefault");
+    var menu1 = document.getElementById('menu1');
+    var menu2 = document.getElementById('menu2');
+
+    menu1.style.display = 'none';
+
+    checkbox1.onchange = function () {
+        if (checkbox1.checked) {
+            menu1.style.display = 'block';
+            menu2.style.display = 'none';
+        } else {
+            menu1.style.display = 'none';
+            menu2.style.display = 'block';
+        }
+    };
+
+    $(document).ready(function () {
+        var switchInput = $("#flexSwitchCheckDefault");
+        var menu3 = $("#menu1"); //menu1 nhung dat menu3 cho k bi trung ten voi global variable
+        var menu4 = $("#menu2"); //menu2 nhung dat menu4 cho k bi trung ten voi global variable
+
+        function toggleFormElements() {
+            if (switchInput.prop("checked")) {
+                menu3.find("input").prop("disabled", false);
+                menu4.find("input").prop("disabled", true);
+
+            } else {
+                menu3.find("input").prop("disabled", true);
+                menu4.find("input").prop("disabled", false);
+            }
+        }
+
+        toggleFormElements();
+
+        switchInput.on("change", function () {
+            toggleFormElements();
+        });
+    });
+
+    
+
+    function removeRecipe(button) {
+        var formGroup = button.closest('.form-group');
+        var recipeContainer = document.getElementById('recipe-container');
+        var recipeCount = recipeContainer.getElementsByClassName('form-group').length;
+
+        if (recipeCount === 1) {
+            // If there is only one ingredient, clear the input fields instead of removing the form group
+            var select = formGroup.querySelector('input[type="text"]');
+            select.value = '';
+        } else {
+            // If there are multiple ingredients, remove the form group
+            formGroup.remove();
+        }
+    }
+
+    // Submit event handler
+    $("#recipe-form").submit(function (event) {
+        showLoading('create-button', 'create-button-container');
+        // Prevent the form from submitting
+        event.preventDefault();
+
+        // Get all the select elements within the container
+        var inputElements = document.querySelectorAll('#recipe-container input[type="text"]');
+        console.log(inputElements);
+
+        // Create a hidden input for each ingredient ID
+        var hiddenInputsContainer = document.getElementById('hidden-inputs-container');
+        hiddenInputsContainer.innerHTML = ''; // Clear any existing hidden inputs
+
+        // Iterate over the select elements and create hidden inputs for each selected ID
+        var flag = false;
+        inputElements.forEach(function (input, index) {
+            //Check input
+            var inputValue = input.value;
+            if (!checkRecipeExists(input.value, input)) {
+                flag = true;
+            };
+
+            if (inputValue !== '') {
+                console.log(inputValue);
+                var hiddenInputId = document.createElement('input');
+                hiddenInputId.type = 'hidden';
+                hiddenInputId.name = 'RecipeNames[]';
+                hiddenInputId.value = inputValue;
+                hiddenInputsContainer.appendChild(hiddenInputId);
+            }
+        });
+
+        // Submit the form
+        if (!flag) {
+            this.submit();
+        }
+    });
+
+    function checkRecipeExists(recipe, element) {
+        var recipeId = recipe.match(/\d+/); // Extract the recipe ID from the recipe string
+        var recipeName = recipe.substring(recipe.indexOf(')') + 1).trim(); // Extract the recipe name after the closing parenthesis and trim any whitespace
+        var recipeString = '(#' + recipeId + ')' + recipeName; // Concatenate id and name in the required format
+        var exists = false;
+        $.ajax({
+            url: '/MealPlan/RecipeNameExists',
+            type: 'POST',
+            data: { recipe: recipeString }, // Pass the recipeString as the data parameter
+            async: false,
+            success: function (data) {
+                exists = data.exists; // Access the 'exists' property from the response data
+            }
+        });
+        return exists;
+    };
+
+    function updateSpan(recipe, element) {
+        var data = checkRecipeExists(recipe, element);
+        var recipeId = element.id.match(/\d+/);
+        if (data) {
+            $('#recipe-span-' + recipeId).css("display", "none");
+        }
+        else {
+            $('#recipe-span-' + recipeId).css("display", "block");
+        }
+    };
+    function autocomplete() {
+        $(".recipes").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/MealPlan/RecipesAutoComplete",
+                    type: "POST",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: '(#' + item.id + ')' + item.name,
+                                value: '(#' + item.id + ')' + item.name
+                            };
+                        }));
+                    },
+                    error: function (xhr, status, error) {
+                        alert("Error");
+                    },
+                    failure: function (response) {
+                        alert("Error");
+                    }
+                });
+            },
+            select: function (e, i) {
+                $(this).val(i.item.value);
+                return false; // Prevent default behavior of selecting the whole label
+            },
+            minLength: 1
+        });
+    };
+    autocomplete();
+
+</script>

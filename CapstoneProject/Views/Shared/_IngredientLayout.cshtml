@@ -1,0 +1,141 @@
+﻿@{
+    var currentController = ViewContext.RouteData.Values["Controller"] as string;
+    var currentAction = ViewContext.RouteData.Values["Action"] as string;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="~/lib/bootstrap-5.3.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/admin.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    <link rel="icon" type="image/x-icon" href="\images\logo.png">
+    <script src="https://kit.fontawesome.com/08194921a9.js" crossorigin="anonymous"></script>
+    <style>
+        hr {
+            clear: both;
+            visibility: hidden;
+        }
+
+        li {
+            list-style: none;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="row">
+        <div class="col-md-2 pe-0">
+            <nav id="sidebarMenu"
+                 class="collapse d-lg-block sidebar collapse bg-white">
+                <div class="position-sticky">
+                    <div class="list-group list-group-flush mx-3 mt-4">
+                        <a asp-controller="Dashboard" asp-action="Index"
+                           class="list-group-item list-group-item-action py-2 ripple @(currentController == "Dashboard" ? "active" : "")"
+                           aria-current="true">
+                            <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>Dashboard</span>
+                        </a>
+                        <a asp-controller="Recipes" asp-action="Index"
+                           class="list-group-item list-group-item-action py-2 ripple @(currentController == "Recipes" ? "active" : "")">
+                            <i class="fas fa-chart-area fa-fw me-3"></i><span>Recipes</span>
+                        </a>
+                        <a asp-controller="RecipeCategory" asp-action="Index"
+                           class="list-group-item list-group-item-action py-2 ripple @(currentController == "RecipeCategory" ? "active" : "")">
+                            <i class="fas fa-chart-area fa-fw me-3"></i><span>Recipe Categories</span>
+                        </a>
+                        <a asp-controller="Ingredients" asp-action="Index"
+                           class="list-group-item list-group-item-action py-2 ripple @(currentController == "Ingredients" ? "active" : "")">
+                            <i class="fas fa-lock fa-fw me-3"></i><span>Ingredients</span>
+                        </a>
+                        <a asp-controller="IngredientCategory" asp-action="Index"
+                           class="list-group-item list-group-item-action py-2 ripple @(currentController == "IngredientCategory" ? "active" : "")">
+                           <i class="fas fa-lock fa-fw me-3"></i><span>Ingredient Categories</span></a>
+                        <a asp-controller="AppRoles" asp-action="Index"
+                           class="list-group-item list-group-item-action py-2 ripple @(currentController == "AppRoles" ? "active" : "")">
+                            <i class="fas fa-chart-line fa-fw me-3"></i><span>Roles</span>
+                        </a>
+                        <a href="#"
+                           class="list-group-item list-group-item-action py-2 ripple">
+                           <i class="fas fa-chart-bar fa-fw me-3"></i><span>Orders</span>
+                       </a>
+                        <a href="#"
+                           class="list-group-item list-group-item-action py-2 ripple">
+                            <i class="fas fa-globe fa-fw me-3"></i><span>International</span>
+                        </a>
+                        <a href="#"
+                           class="list-group-item list-group-item-action py-2 ripple">
+                            <i class="fas fa-building fa-fw me-3"></i><span>Partners</span>
+                        </a>
+                        <a href="#"
+                           class="list-group-item list-group-item-action py-2 ripple">
+                            <i class="fas fa-calendar fa-fw me-3"></i><span>Calendar</span>
+                        </a>
+                        <a href="#"
+                           class="list-group-item list-group-item-action py-2 ripple"><i class="fas fa-users fa-fw me-3"></i><span>Users</span></a>
+                        <a href="#"
+                           class="list-group-item list-group-item-action py-2 ripple"><i class="fas fa-money-bill fa-fw me-3"></i><span>Sales</span></a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <div class="col-md-10">
+            <header class="text-bg-light">
+                <div class="container">
+                    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                        <a class="navbar-brand mb-xs-2 mb-sm-2" asp-area="" asp-controller="Home" asp-action="Index">
+                            <img src="\images\logo.png" alt="Logo" width="80" height="80" class="d-inline-block align-text-top">
+                        </a>
+                        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                            @*<li><a href="#" class="nav-link px-2 text-white active">Home</a></li>
+                            <li><a href="#" class="nav-link px-2 text-white">Features</a></li>
+                            <li><a href="#" class="nav-link px-2 text-white">Pricing</a></li>
+                            <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
+                            <li><a href="#" class="nav-link px-2 text-white">About</a></li>
+                            *@
+                        </ul>
+                        <div class="text-end d-flex">
+                            <partial name="_LoginPartial" />
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <partial name="_Notification" />
+            @RenderBody()
+        </div>  
+    </div>
+    <script src="~/lib/jquery-3.7.0.min.js"></script>
+    <script src="~/lib/bootstrap-5.3.0/js/bootstrap.min.js"></script>
+    <script src="~/lib/bootstrap-5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="~/lib/vendor/chart.js/Chart.min.js"></script>
+    <script src="~/lib/vendor/chart.js/Chart.bundle.min.js"></script>
+    <script src="~/js/chart/chart-area-demo.js"></script>
+    <script src="~/js/chart/chart-pie-demo.js"></script>
+    <script>
+        $(document).ready(function () {
+            var currentUrl = document.location.pathname;
+
+            var elementLevelZero = $('.nav-main a[href="' + currentUrl + '"]');
+            $(elementLevelZero).addClass('active');
+
+            var elementLevelZeroList = $(elementLevelZero).closest('ul');
+
+            var elementLevelOne = $(elementLevelZeroList).prev("a");
+            $(elementLevelOne).addClass('active');
+
+            var elementLevelOneList = $($(elementLevelOne).parent()).closest('ul');
+
+            var elementLevelTwo = $(elementLevelOneList).prev("a");
+            $(elementLevelTwo).addClass('active');
+
+            var elementLevelTwoList = $($(elementLevelTwo).parent()).closest('ul');
+
+            var elementLevelThree = $(elementLevelTwoList).prev("a");
+            $(elementLevelThree).addClass('active');
+        });
+    </script>
+</body>
+</html>

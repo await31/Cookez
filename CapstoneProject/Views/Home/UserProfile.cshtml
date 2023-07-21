@@ -1,0 +1,107 @@
+﻿@model Account
+@inject SignInManager<BusinessObjects.Models.Account> SignInManager
+@using Microsoft.AspNetCore.Identity;
+@inject UserManager<BusinessObjects.Models.Account> UserManager
+@{
+    ViewData["Title"] = "User Profile";
+}
+
+<section class="h-100 gradient-custom-2">
+    <div class=" py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col col-lg-9 col-xl-7">
+                <div class="card">
+                    <div class="rounded-top text-white d-flex flex-row py-4" style="background-color: #000;">
+                        <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
+                            <img src="@Model.ImgPath"
+                                 alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
+                                 style="width: 150px; z-index: 1">
+                        </div>
+                        <div class="ms-3" style="margin-top: auto;">
+                            <h5 class="text-light">@Model.UserName</h5>
+                        </div>
+                    </div>
+                    <div class="p-4 text-black" style="background-color: #f8f9fa;">
+                        <div class="d-flex justify-content-end text-center py-1">
+                            <div>
+                                <p class="mb-1 h5">@Model.Recipes.Where(a=>a.Status==true).Count()</p>
+                                <p class="small text-muted mb-0">Recipes</p>
+                            </div>
+                            <div class="px-3">
+                                <p class="mb-1 h5">@Model.CreatedDate.ToShortDateString()</p>
+                                <p class="small text-muted mb-0">Joining Date</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-4 text-color-change">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <p class="lead fw-normal mb-0 text-color-change">Popular recipes</p>
+                        </div>
+                        <div class="row row-cols-2 row-cols-lg-3 g-2 g-lg-3">
+                              @foreach(var item in (IEnumerable<Recipe>)ViewData["popularRecipes"]) {
+                                  <a asp-controller="UserRecipes" asp-action="Details" asp-route-id="@item.Id" target="_blank">
+                                        <div class="col mb-1">
+                                            <img src="@item.ImgPath"
+                                                 style="height: 200px; width: 200px;" class="w-100 rounded-3">
+                                        </div>
+                                  </a>
+                              }
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <p class="lead fw-normal mb-0 text-color-change">Collections</p>
+                        </div>
+                        <div class="row row-cols-1 row-cols-lg-1 g-2 g-lg-3 ms-5    ">
+                            @foreach (var collection in (IEnumerable<Favourite>)ViewData["collections"]) {
+                                <div class="card mb-3 mx-2 text-color-change" style="height:450px; width: 18rem; padding: 0;display: flex;">
+                                    <div class="card-img-top" style="height: 45%; width: 100%;background-color: darkgray">
+                                        <a asp-controller="Favourites" asp-action="Details" asp-route-id="@collection.Id">
+                                            @if (collection.Recipes.FirstOrDefault() != null) {
+                                                if (collection.Recipes.First().ImgPath != null) {
+                                                    <img src="@collection.Recipes.First().ImgPath" class="img-fluid " alt="Food" style="height: 100%;width: 100%; object-fit: cover;">
+                                                }
+                                            }
+                                        </a>
+                                    </div>
+                                    <div class="card-body" style="padding: 0">
+                                        <div class="d-flex justify-content-around" style="height: 30%;width: 100%; padding: 0; margin: 0;">
+                                            @for (var i = 0; i < 3; i++) {
+                                                <div class="col-4" style="height: 100%; width:30%;background-color: darkgray; padding: 0; margin-top: 4px; margin-bottom: 4px">
+                                                    @if (i + 1 < collection.Recipes.Count()) {
+                                                        @if (collection.Recipes.ElementAt(1 + i) != null) {
+                                                            <a asp-controller="Favourites" asp-action="Details" asp-route-id="@collection.Id">
+                                                                @if (collection.Recipes.ElementAt(1 + i).ImgPath != null) {
+                                                                    <img src="@collection.Recipes.ElementAt(1+i).ImgPath" class="img-fluid" alt="Food" style="height: 100%; width: 100%;object-fit: cover;">
+                                                                }
+                                                            </a>
+                                                        }
+                                                    }
+                                                </div>
+                                            }
+                                        </div>
+                                        <div style="margin: 8px">
+                                            <a class="card-title card-limit-1 link-info link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                                           asp-controller="Favourites" asp-action="Details" asp-route-id="@collection.Id">
+
+                                                <h5 class="text-color-change" style="font-weight: bold;">@collection.Name</h5>
+                                            </a>
+                                            @if (collection.Description == null) {
+                                                <p class="card-text card-limit-2 text-color-change">This collection doesn't have a description yet.</p>
+                                            } else {
+                                                <p class="card-text card-limit-2 text-color-change">@collection.Description</p>
+                                            }
+
+                                            <h6 class="card-text card-limit-1 text-color-change">@collection.Recipes.Count() items in this collection</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

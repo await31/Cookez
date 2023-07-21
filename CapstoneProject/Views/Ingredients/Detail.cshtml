@@ -1,0 +1,58 @@
+﻿@model BusinessObjects.Models.Ingredient
+
+<form method="post" enctype="multipart/form-data">
+    <div class="p-3 mt-4">
+        <div class="row pb-2">
+            <h2 class="text-success">Create Ingredient</h2>
+            <hr />
+        </div>
+        <div class="mb-3">
+            <label for="name" class="form-label font-weight-bold">Name</label>
+            <div class="form-control" id="name">@Model.Name</div>
+        </div>
+        <div class="mb-3">
+            <label for="image">Image</label>
+            <div class="mb-3">
+                <img src="@Model.ImgPath" class="img-fluid" style="max-width: 200px; height: auto;">
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="description">Description</label>
+            <div class="form-control" id="description">@Model.Description</div>
+        </div>
+        <div class="mb-3">
+            <label for="category">Category</label>
+            <div class="form-control" id="category">@Model.FkCategory.Name</div>
+        </div>
+
+        <!-- Nutrition Details -->
+        <div class="mb-3">
+            <h4>Nutrition Information</h4>
+            <div class="mb-2">
+                <label for="calories" class="form-label">Calories</label>
+                <div class="form-control" id="calories">@Model.IngredientNutrition.Calories</div>
+            </div>
+            <div class="mb-2">
+                <label for="fiber" class="form-label">Fiber</label>
+                <div class="form-control" id="fiber">@Model.IngredientNutrition.Fibre</div>
+            </div>
+            <div class="mb-2">
+                <label for="carbohydrate" class="form-label">Carbohydrate</label>
+                <div class="form-control" id="carbohydrate">@Model.IngredientNutrition.Carbohydrate</div>
+            </div>
+            <div class="mb-2">
+                <label for="protein" class="form-label">Protein</label>
+                <div class="form-control" id="protein">@Model.IngredientNutrition.Protein</div>
+            </div>
+            <div class="mb-2">
+                <label for="fat" class="form-label">Fat</label>
+                <div class="form-control" id="fat">@Model.IngredientNutrition.Fat</div>
+            </div>
+            <div class="mb-2">
+                <label for="cholesterol" class="form-label">Cholesterol</label>
+                <div class="form-control" id="cholesterol">@Model.IngredientNutrition.Cholesterol</div>
+            </div>
+        </div>
+    </div>
+    <a asp-controller="Dashboard" asp-action="Index" class="btn btn-warning mt-3" style="width: 10%;">Back to dashboard</a>
+</form>

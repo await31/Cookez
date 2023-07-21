@@ -1,0 +1,321 @@
+﻿@model Recipe
+
+@inject SignInManager<BusinessObjects.Models.Account> SignInManager
+@using Microsoft.AspNetCore.Identity;
+@inject UserManager<BusinessObjects.Models.Account> UserManager﻿
+@{
+    ViewBag.Title = "Edit recipe";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentUser = await UserManager.GetUserAsync(User);
+}
+
+
+<style>
+    a:hover {
+        cursor: pointer;
+    }
+
+    .label-font {
+        font-family: 'Comic Sans MS';
+    }
+</style>
+@if (SignInManager.IsSignedIn(User))
+{
+    if (currentUser.Id == Model.FkUserId)
+    {
+        <div class="row d-flex mb-5">
+            <div class="col-2">
+            </div>
+
+            <div class="col-8 rounded-3 bg-white border border-dark border-2" style="background-color: #e7f9fd;">
+                <form id="recipe-form" asp-action="Edit" enctype="multipart/form-data" class="p-5">
+                    <input asp-for="Id" hidden />
+                    <input asp-for="CreatedDate" hidden />
+                    <input asp-for="FkUser" hidden />
+                    <input asp-for="FkUserId" hidden />
+                    <input asp-for="Status" hidden />
+                    <input asp-for="ViewCount" hidden />
+                    <input asp-for="ImgPath" hidden />
+                    <h1 class="text-center mb-5 text-dark label-font">Information</h1>
+                    <div asp-validation-summary="ModelOnly" class="text-danger text-color-change-red"></div>
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label mb-2 label-font">Recipe Name</label>
+                        <input asp-for="Name" class="form-control" placeholder="e.g. Egg fried rice" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mt-4">
+                        <label class="mb-2 label-font" asp-for="file">Recipe Image</label>
+                        <input asp-for="file" class="form-control" type="file" name="file" accept="image/png, image/jpeg" onchange="FileChange()" />
+                    </div>
+                    <div class="form-group mt-4">
+                        <label asp-for="FkRecipeCategoryId" class="control-label mb-2 label-font">Category</label>
+                        <select asp-for="FkRecipeCategoryId" class="form-control" asp-items="ViewBag.FkRecipeCategoryId"></select>
+                    </div>
+                    <div class="form-group mt-4">
+                        <label asp-for="PrepTime" class="control-label mb-2 label-font">Preparation Time</label>
+                        <select asp-for="PrepTime" asp-items="ViewBag.PrepTime" class="form-control"></select>
+                        <span asp-validation-for="PrepTime" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mt-4">
+                        <label asp-for="Difficult" class="control-label mb-2 label-font">Difficult Level</label>
+                        <select asp-for="Difficult" asp-items="ViewBag.Difficulty" class="form-control">
+                        </select>
+                    </div>
+                    <div class="form-group mt-4">
+                        <label asp-for="ServingSize" class="control-label mb-2 label-font">Serving Size (People)</label>
+                        <input asp-for="ServingSize" class="form-control" type="number" min="1" />
+                    </div>
+                    @*
+                        <div class="form-group mt-5">
+                        <p class="text-center text-dark fw-bolder fs-2 label-font mb-4">Nutrition &nbsp;Facts</p>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label asp-for="Nutrition.Calories" class="control-label label-font">Calories (kcal)</label>
+                                <input asp-for="Nutrition.Calories" class="form-control" min="1" max="10000" placeholder="Optional" />
+                                <span asp-validation-for="Nutrition" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <label asp-for="Nutrition.Fat" class="control-label label-font">Fat (g)</label>
+                                <input asp-for="Nutrition.Fat" class="form-control" min="1" max="10000" placeholder="Optional" />
+                                <span asp-validation-for="Nutrition" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <label asp-for="Nutrition.Protein" class="control-label label-font">Protein (g)</label>
+                                <input asp-for="Nutrition.Protein" class="form-control" min="1" max="10000" placeholder="Optional" />
+                                <span asp-validation-for="Nutrition" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-4">
+                                <label asp-for="Nutrition.Fibre" class="control-label label-font">Fibre (g)</label>
+                                <input asp-for="Nutrition.Fibre" class="form-control" min="1" max="10000" placeholder="Optional" />
+                                <span asp-validation-for="Nutrition" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <label asp-for="Nutrition.Cholesterol" class="control-label label-font">Cholesterol (g)</label>
+                                <input asp-for="Nutrition.Cholesterol" class="form-control" min="1" max="10000" placeholder="Optional" />
+                                <span asp-validation-for="Nutrition" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <label asp-for="Nutrition.Carbohydrate" class="control-label label-font">Carbohydrate (g)</label>
+                                <input asp-for="Nutrition.Carbohydrate" class="form-control" min="1" max="10000" placeholder="Optional" />
+                                <span asp-validation-for="Nutrition" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    *@
+                    <!-- Ingredient -->
+                    <div id="ingredient-container" class="mt-5">
+                        <!-- Initial ingredient select element -->
+                        <p class="text-center text-dark fw-bolder fs-2 label-font">Ingredients</p>
+                        @if (ViewBag.Ingredients != null)
+                        {
+                            foreach (var ingredient in ViewBag.IngredientDetails as IEnumerable<RecipeIngredient>)
+                            {
+                                List<Ingredient> allIngredientDetails = ViewBag.Ingredients;
+                                var ingredientName = allIngredientDetails.FirstOrDefault(d => d.Id == ingredient.IngredientId).Name;
+                                <div class="form-group row mt-4">
+                                    <div class="col-md-4">
+                                        <label for="IngredientName" class="mb-2 label-font">Name</label>
+                                        <input type="text" class="form-control ingredients" value="@ingredientName" id="IngredientName" name="IngredientNames[]" onchange="updateSpan(this.value,this)" required />
+                                        <span id="ingredient-span-1" class="text-danger" style="display: none;">This ingredient doesn't exists!</span>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="Quantity" class="mb-2 label-font">Quantity</label>
+                                        <input type="number" class="form-control" value="@ingredient.Quantity" id="Quantity" name="Quantities[]" step="any" min="1" required />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="UnitOfMeasure" class="mb-2 label-font">Unit of Measure</label>
+                                        <select class="form-control" id="UnitOfMeasure" name="UnitOfMeasures[]" asp-items="@ViewData["Unit" +ingredient.IngredientId] as SelectList" required>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-1" style="margin-top: 4%;">
+                                        <a onclick="removeIngredient(this)" class="text-decoration-none text-danger ms-3 fw-bolder fs-4"><i class="fa-solid fa-trash-can"></i></a>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                    <div class="mt-3">
+                        <a onclick="addIngredient()" class="text-decoration-none text-success label-font">Add Ingredient <i class="fa-solid fa-plus"></i></a>
+                    </div>
+
+
+                    <div class="form-group mt-5">
+                        <p class="text-center text-dark fw-bolder fs-2 mb-4 label-font">Cooking Instruction</p>
+                        <textarea asp-for="Description" class="form-control ckeditor"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div id="hidden-inputs-container"></div>
+                    <div class="form-group mt-5 text-center">
+                        <input type="submit" value="Save Edit" class="btn btn-success btn-lg" />
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-2">
+            </div>
+        </div>
+    }
+    else
+    {
+        <h1 class="text-danger text-center">USER IS NOT THE OWNER OF THIS RECIPE</h1>
+    }
+}
+else
+{
+    <h1 class="text-danger text-center">USER IS NOT THE OWNER OF THIS RECIPE</h1>
+}
+
+
+<script src="~/lib/jquery-3.7.0.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+<script>
+    var ingredientIndex = 1;
+    function addIngredient() {
+        var container = document.getElementById('ingredient-container');
+        var originalFormGroup = container.querySelector('.form-group');
+
+        var newFormGroup = originalFormGroup.cloneNode(true);
+        var newInput = newFormGroup.querySelector('input[type="text"]');
+        var newQuantityInput = newFormGroup.querySelector('input[type="number"]');
+        var newUnitOfMeasureSelect = newFormGroup.querySelector('select[name="UnitOfMeasures[]"]');
+        var newSpan = newFormGroup.querySelector('span');
+
+        // Clear the selected option in the new select element
+        newInput.value = '';
+        newQuantityInput.value = '';
+        newUnitOfMeasureSelect.value = '';
+        //changeId
+        ingredientIndex++;
+        newInput.id = 'ingredient-id-' + (ingredientIndex);
+        newSpan.id = 'ingredient-span-' + (ingredientIndex);
+        // Add the new form group to the container
+        container.appendChild(newFormGroup);
+        autocomplete();
+    }
+
+    function removeIngredient(button) {
+        var formGroup = button.closest('.form-group');
+        var ingredientContainer = document.getElementById('ingredient-container');
+        var ingredientCount = ingredientContainer.getElementsByClassName('form-group').length;
+
+        if (ingredientCount === 1) {
+            // If there is only one ingredient, clear the input fields instead of removing the form group
+            var select = formGroup.querySelector('input[type="text"]');
+            var quantityInput = formGroup.querySelector('input[type="number"]');
+            var unitOfMeasureSelect = formGroup.querySelector('select[name="UnitOfMeasures[]"]');
+
+            select.value = '';
+            quantityInput.value = '';
+            unitOfMeasureSelect.value = '';
+        } else {
+            // If there are multiple ingredients, remove the form group
+            formGroup.remove();
+        }
+    }
+
+    // Submit event handler
+    $("#recipe-form").submit(function (event) {
+        // Prevent the form from submitting
+        event.preventDefault();
+
+        // Get all the select elements within the container
+        var inputElements = document.querySelectorAll('#ingredient-container input[type="text"]');
+        var quantityInputs = document.querySelectorAll('#ingredient-container input[type="number"]');
+        var unitOfMeasureSelects = document.querySelectorAll('#ingredient-container select[name="UnitOfMeasures[]"]');
+
+        // Create a hidden input for each ingredient ID
+        var hiddenInputsContainer = document.getElementById('hidden-inputs-container');
+        hiddenInputsContainer.innerHTML = ''; // Clear any existing hidden inputs
+
+        // Iterate over the select elements and create hidden inputs for each selected ID
+        var flag = false;
+        inputElements.forEach(function (input, index) {
+            //Check input
+            var inputValue = input.value;
+            var quantity = quantityInputs[index].value;
+            var unitOfMeasure = unitOfMeasureSelects[index].value;
+            if (!checkIngredientExists(input.value, input)) {
+                flag = true;
+            };
+
+            if (inputValue !== '' && quantity !== '' && unitOfMeasure !== '') {
+                var hiddenInputId = document.createElement('input');
+                hiddenInputId.type = 'hidden';
+                hiddenInputId.name = 'IngredientNames[]';
+                hiddenInputId.value = inputValue;
+                hiddenInputsContainer.appendChild(hiddenInputId);
+
+                var hiddenInputQuantity = document.createElement('input');
+                hiddenInputQuantity.type = 'hidden';
+                hiddenInputQuantity.name = 'Quantities[]';
+                hiddenInputQuantity.value = quantity;
+                hiddenInputsContainer.appendChild(hiddenInputQuantity);
+
+                var hiddenInputUnitOfMeasure = document.createElement('input');
+                hiddenInputUnitOfMeasure.type = 'hidden';
+                hiddenInputUnitOfMeasure.name = 'UnitOfMeasures[]';
+                hiddenInputUnitOfMeasure.value = unitOfMeasure;
+                hiddenInputsContainer.appendChild(hiddenInputUnitOfMeasure);
+            }
+        });
+
+        // Submit the form
+        if (!flag) {
+            this.submit();
+        }
+    });
+    function checkIngredientExists(ingredient, element) {
+        var ingredientId = element.id.match(/\d+/);
+        var exists = false;
+        $.ajax({
+            url: '/UserRecipes/IngredientNameExists',
+            type: 'POST',
+            data: { name: ingredient },
+            async: false,
+            success: function (data) {
+                exists = data;
+            }
+        });
+        return exists;
+    };
+    function updateSpan(ingredient, element) {
+        var data = checkIngredientExists(ingredient, element);
+        var ingredientId = element.id.match(/\d+/);
+        if (data) {
+            $('#ingredient-span-' + ingredientId).css("display", "none");
+        }
+        else {
+            $('#ingredient-span-' + ingredientId).css("display", "block");
+        }
+    };
+    function autocomplete() {
+        $(".ingredients").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Ingredients/AutoComplete",
+                    type: "POST",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return item.name;
+                        }));
+                    },
+                    error: function (xhr, status, error) {
+                        alert("Error");
+                    },
+                    failure: function (response) {
+                        alert("Error");
+                    }
+                });
+            },
+            select: function (e, i) {
+                $(this).val(i.item.val);
+            },
+            minLength: 1
+        })
+    };
+    autocomplete();
+</script>
+<script src="~/ckeditor/ckeditor.js"></script>

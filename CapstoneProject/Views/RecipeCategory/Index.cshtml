@@ -1,0 +1,40 @@
+﻿@model IEnumerable<BusinessObjects.Models.RecipeCategory>
+@{
+    ViewBag.Title = "Dasbhoard";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="container-fluid">
+    <div class="px-0">
+        <br />
+        <div class="col-5">
+            <a asp-controller="RecipeCategory" asp-action="Create" class="btn btn-success fw-bold text-light mt-2"><i class="fa-solid fa-folder-plus"></i> New Category</a>
+        </div>
+        <br />
+        <table class="table table-bordered table-striped w-100">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var obj in Model) {
+                    <tr>
+                        <td class="w-25">@obj.Id</td>
+                        <td class="w-25">@obj.Name</td>
+                        <td style="width:3%"><a class="text-decoration-none text-light btn btn-warning" asp-controller="RecipeCategory" asp-action="Edit" asp-route-id="@obj.Id"><i class="fa-solid fa-pen-to-square"></i> Edit</a></td>
+                        <td style="width:3%"><a class="text-decoration-none text-light btn btn-danger" asp-controller="RecipeCategory" asp-action="Delete" asp-route-id="@obj.Id"><i class="fa-solid fa-trash-can"></i> Delete</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+
+
+

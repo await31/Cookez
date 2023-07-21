@@ -1,0 +1,67 @@
+﻿@model BusinessObjects.Models.Ingredient
+
+@{
+    ViewData["Title"] = "Create ingredient";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<form method="post" enctype="multipart/form-data">
+    <div class="p-3 mt-4">
+        <div class="row pb-2">
+            <h2 class="text-success">Create Ingredient</h2>
+            <hr />
+        </div>
+        <div class="mb-3">
+            <label class="mb-2" asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label class="mb-2" asp-for="file">Upload File</label>
+            <input asp-for="file" class="form-control" type="file" name="file" accept="image/png, image/jpeg" required />
+        </div>
+        <div class="mb-3">
+            <label class="mb-2" asp-for="Description"></label>
+            <input asp-for="Description" class="form-control" />
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="FkCategoryId" class="control-label">Select category</label>
+            <select asp-for="FkCategoryId" class="form-control" asp-items="ViewBag.FkCategoryId"></select>
+        </div>
+        <p>Nutrition Facts (Per 1 grams/milliliters)</p>
+        <div class="form-group">
+            <label class="mb-2" asp-for="IngredientNutrition.Calories"></label>
+            <input asp-for="IngredientNutrition.Calories" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="mb-2" asp-for="IngredientNutrition.Fibre"></label>
+            <input asp-for="IngredientNutrition.Fibre" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="mb-2" asp-for="IngredientNutrition.Carbohydrate"></label>
+            <input asp-for="IngredientNutrition.Carbohydrate" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="mb-2" asp-for="IngredientNutrition.Protein"></label>
+            <input asp-for="IngredientNutrition.Protein" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="mb-2" asp-for="IngredientNutrition.Fat"></label>
+            <input asp-for="IngredientNutrition.Fat" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="mb-2" asp-for="IngredientNutrition.Cholesterol"></label>
+            <input asp-for="IngredientNutrition.Cholesterol" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3" style="width: 10%;">Create</button>
+        <a asp-controller="Ingredients" asp-action="Index" class="btn btn-warning mt-3" style="width: 10%;">Back to list</a>
+    </div>
+</form>
+
+

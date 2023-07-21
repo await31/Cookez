@@ -1,0 +1,312 @@
+:root {
+    --gray-5: #010101; /*dark to...*/
+    --gray-10: #040404;
+    --gray-15: #070808;
+    --gray-20: #0D0D0E;
+    --gray-25: #141516;
+    --gray-30: #1E2022;
+    --gray-35: #515151; /*background color*/
+    --gray-40: #404346;
+    --gray-45: #5B5E62;
+    --gray-50: #7C8084;
+    --gray-55: #9DA1A5;
+    --gray-60: #B9BDC1;
+    --gray-65: #CDD1D5;
+    --gray-70: #F8F6F2;
+    --gray-75: #E7EAED;
+    --gray-80: #EFF2F5;
+    --gray-85: #F4F7FA;
+    --gray-90: #F7FAFD;
+    --gray-95: #FCFEFE; /*...to light*/
+    /*Form color*/
+    --main-color: #E7F9FD; /*light blue*/
+    --contrast-color: #1b2a47; /*dark blue*/
+    --darkform-color: #1b2a47; /*dark blue*/
+    --modal-color: #231d34; /*dark blue*/
+    /*Sidebar admin color*/
+    --admin-sidebar: white;
+    --admin-sidebar-contrast: #1b2a47; /*dark blue*/
+
+    --animate: 00ms;
+}
+
+body {
+    background: var(--gray-70);
+    -webkit-font-smoothing: antialiased;
+    transition: color var(--animate) ease-in-out, background var(--animate) ease-in-out;
+}
+/*bgc*/
+body.dark {
+    color: var(--gray-80);
+    background: var(--gray-35);
+}
+
+h6 {
+    color: var(--gray-40);
+    transition: color var(--animate) ease-in-out;
+}
+
+body.dark h6 {
+    color: var(--gray-80);
+}
+
+/*form*/
+.color-change {
+    background-color: var(--main-color); /*light mode*/
+}
+
+body.dark div.color-change{
+    background-color: var(--darkform-color); /*dark mode*/
+}
+
+body.dark div.modal-color-change {
+    background-color: var(--modal-color);
+}
+
+body.dark div.header-color-change{
+    background-color: var(--gray-80);
+}
+
+body.dark input#SearchString{
+    background-color: #d1d1d1;
+}
+/*breadcrumb*/
+li.breadcrumb-item.active {
+    color: #212529; /*light mode*/
+}
+
+body.dark li.breadcrumb-item.active {
+    color: var(--gray-80); /*dark mode*/
+}
+
+/*label and text*/
+body.dark label, body.dark h3, body.dark h4, body.dark h5, body.dark p, body.dark ol, body.dark li {
+    color: black; /*dark mode*/
+}
+
+body.dark *.text-color-change {
+    color: white; /*dark mode*/
+}
+body.dark *.text-color-change-black {
+    color: black; /*dark mode*/
+}
+body.dark .text-color-change-red li{
+    color: red; /*dark mode*/
+}
+body.dark td {
+    color: white;
+}
+
+/*Trivia*/
+body.dark p.darkmode-shadow {
+    text-shadow: 2px 2px 4px #000000;
+}
+
+
+/*Admin page*/
+body.dark nav.bar-admin-change {
+    background-color: var(--admin-sidebar-contrast);
+    transition: background var(--animate) ease-in-out;
+}
+.bar-admin-change {
+    background-color: var(--admin-sidebar);
+}
+
+body.dark div.list-group-flush, body.dark a.list-group-item {
+    background-color: var(--admin-sidebar-contrast);
+    color: white;
+    transition: color var(--animate) ease-in-out, background var(--animate) ease-in-out;
+}
+
+/*Card*/
+body.dark div.card{
+    background-color: var(--admin-sidebar-contrast);
+}
+
+div.card{
+    background-color: var(--main-color);
+}
+
+.load-flash {
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: absolute;
+    background: var(--gray-85);
+}
+
+.mode-toggle {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.label-dark {
+    letter-spacing: -0.15px;
+}
+
+.label-light {
+    letter-spacing: -0.031px;
+}
+
+.mode-toggle h6,
+body.dark .mode-toggle h6 {
+    text-transform: uppercase;
+}
+
+.label-dark,
+.label-light {
+    padding: 8px 12px;
+    min-width: 32px;
+    text-align: center;
+    color: var(--gray-45);
+}
+
+body.dark .label-dark,
+body.dark .label-light {
+    color: var(--gray-60);
+}
+
+.label-dark:hover {
+    color: var(--gray-40);
+}
+
+.label-dark:active {
+    color: var(--gray-5);
+}
+
+body.dark .label-dark {
+    pointer-events: none;
+}
+
+body.dark .label-light:hover {
+    color: var(--gray-95);
+}
+
+body.dark .label-light:active {
+    color: var(--gray-65);
+}
+
+.toggle-switch {
+    margin: 0;
+    padding: 0;
+    width: 48px;
+    height: 28px;
+    border: none;
+    outline: none;
+    overflow: hidden;
+    position: relative;
+    border-radius: 14px;
+    display: inline-block;
+    background: var(--gray-40);
+}
+
+body.dark .toggle-switch {
+    width: 48px;
+}
+
+.toggle-switch,
+.toggle-switch:before,
+.toggle-switch:after {
+    transition: all var(--animate) ease-in-out;
+}
+
+body.dark .toggle-switch {
+    background: var(--gray-70);
+}
+
+.toggle-switch:before {
+    top: 4px;
+    left: 24px;
+    content: "";
+    width: 20px;
+    height: 20px;
+    display: block;
+    position: absolute;
+    border-radius: 12px;
+    background: var(--gray-70);
+}
+
+body.dark .toggle-switch:before {
+    left: 4px;
+    background: var(--gray-35);
+}
+
+.toggle-switch:after {
+    content: "";
+    top: 14px;
+    right: 2px;
+    width: 1px;
+    height: 1px;
+    display: block;
+    position: absolute;
+    border-radius: 0.5px;
+    background: var(--gray-40);
+}
+
+body.dark .toggle-switch:after {
+    top: -2px;
+    right: 2px;
+    width: 32px;
+    height: 32px;
+    border-radius: 16px;
+    background: var(--gray-70);
+}
+
+.toggle-switch:hover,
+.toggle-switch:hover:after {
+    background: var(--gray-35);
+}
+
+.toggle-switch:focus,
+.toggle-switch:active,
+.toggle-switch:active:after {
+    background: var(--gray-25);
+}
+
+body.dark .toggle-switch:hover,
+body.dark .toggle-switch:hover:after {
+    background: var(--gray-95);
+}
+
+body.dark .toggle-switch:focus,
+body.dark .toggle-switch:active,
+body.dark .toggle-switch:active:after {
+    background: var(--gray-65);
+}
+
+.noselect {
+    user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
+
+.disableEasingTemporarily,
+.disableEasingTemporarily:after,
+.disableEasingTemporarily:before {
+    -o-transition-property: none !important;
+    -moz-transition-property: none !important;
+    -ms-transition-property: none !important;
+    -webkit-transition-property: none !important;
+    transition-property: none !important;
+    -o-transform: none !important;
+    -moz-transform: none !important;
+    -ms-transform: none !important;
+    -webkit-transform: none !important;
+    transform: none !important;
+    -webkit-animation: none !important;
+    -moz-animation: none !important;
+    -o-animation: none !important;
+    -ms-animation: none !important;
+    animation: none !important;
+}
+
+/*body.preload * {
+    animation-duration: 0s !important;
+    -webkit-animation-duration: 0s !important;
+    transition: background-color 0s, opacity 0s, color 0s, width 0s, height 0s, padding 0s, margin 0s !important;
+}*/
+

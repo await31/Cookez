@@ -1,0 +1,149 @@
+﻿@using BusinessObjects.Models;
+@inject SignInManager<Account> SignInManager
+@inject UserManager<Account> UserManager
+@{ 
+	var currentUser = await UserManager.GetUserAsync(User);
+	var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>@ViewBag.Title</title>
+	<link rel="stylesheet" href="~/css/accountmanagestyle.css" />
+	<link rel="stylesheet" href="~/css/pwdrevealstyle.css" />
+	<link rel="stylesheet" href="~/lib/bootstrap-5.3.0/css/bootstrap.min.css" />
+	<script src="https://kit.fontawesome.com/08194921a9.js" crossorigin="anonymous"></script>
+
+</head>
+<body>
+	<h1>Manage your account</h1>
+
+	<section class="py-5 my-5">
+		<div class="container">
+			<div class="bg-white shadow rounded-lg d-block d-sm-flex row">
+				<div class="col-md-3">
+					<div class="p-4">
+						<div class="text-center">
+							<img src="@currentUser.ImgPath" style="width: 100px; height: 100px;" class="img-fluid shadow avt" alt="avatar">
+						</div>
+						<h4 class="text-center mt-2">@currentUser.UserName</h4>
+					</div>
+					<div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+						<div class="@ManageNavPages.IndexNavClass(ViewContext)">
+							<a class="nav-link active" id="v-pills-account-tab" asp-page="./Index" role="tab" aria-controls="v-pills-account" aria-selected="true">
+								<i class="fa fa-home text-center mr-1"></i>
+								Profile
+							</a>
+						</div>
+
+						<div class="@ManageNavPages.EmailNavClass(ViewContext)">
+							<a class="nav-link" id="v-pills-email-tab" asp-page="./Email" role="tab" aria-controls="v-pills-email" aria-selected="false">
+								<i class="fa fa-envelope text-center mr-1"></i>
+								Email
+							</a>
+						</div>
+
+						<div class="@ManageNavPages.ChangePasswordNavClass(ViewContext)">
+							<a class="nav-link" id="v-pills-changepassword-tab" asp-page="./ChangePassword" role="tab" aria-controls="v-pills-password" aria-selected="false">
+								<i class="fa fa-key text-center mr-1"></i>
+								Password
+							</a>
+						</div>
+					
+						<div class="@ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)">
+							<a class="nav-link" id="v-pills-2fa-tab" asp-page="./TwoFactorAuthentication" role="tab" aria-controls="v-pills-2fa" aria-selected="false">
+								<i class="fa fa-user text-center mr-1"></i>
+								Two-factor authentication
+							</a>
+						</div>
+					
+						@if (hasExternalLogins)
+						{
+							<div class="@ManageNavPages.ExternalLoginsNavClass(ViewContext)">
+
+								<a class="nav-link" id="v-pills-externallogin-tab" asp-page="./ExternalLogins" role="tab" aria-controls="v-pills-externallogin" aria-selected="false">
+									<i class="fa fa-tv text-center mr-1"></i>
+									External logins
+								</a>
+							</div>
+						}
+
+						<div class="@ManageNavPages.PersonalDataNavClass(ViewContext)">
+							<a class="nav-link" id="v-pills-personaldata-tab" asp-page="./PersonalData" role="tab" aria-controls="v-pills-personaldata" aria-selected="false">
+								<i class="fa fa-bell text-center mr-1"></i>
+								Personal data
+							</a>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-9">
+					<div class="tab-content p-4 p-md-5" id="v-pills-tabContent">
+						<div class="tab-pane fade show active" id="v-pills-account" role="tabpanel" aria-labelledby="v-pills-account-tab">
+							<h3 class="mb-4">Account Settings</h3>
+							@RenderBody()
+						</div>
+						<div class="tab-pane fade" id="v-pills-email" role="tabpanel" aria-labelledby="v-pills-email-tab">
+							<h3 class="mb-4">Email Settings</h3>
+							@RenderBody()
+						</div>
+						<div class="tab-pane fade" id="v-pills-changepassword" role="tabpanel" aria-labelledby="v-pills-changepassword-tab">
+							<h3 class="mb-4">Password Settings</h3>
+							@RenderBody()
+						</div>
+						<div class="tab-pane fade" id="v-pills-2fa" role="tabpanel" aria-labelledby="v-pills-2fa-tab">
+							<h3 class="mb-4">Two-factor Authentication Settings</h3>
+							@RenderBody()
+						</div>
+						@if (hasExternalLogins)
+						{
+							<div class="tab-pane fade" id="v-pills-externallogin" role="tabpanel" aria-labelledby="v-pills-externallogin-tab">
+								<h3 class="mb-4">External Login Settings</h3>
+								@RenderBody()
+							</div>
+						}
+						<div class="tab-pane fade" id="v-pills-personaldata" role="tabpanel" aria-labelledby="v-pills-personaldata-tab">
+							<h3 class="mb-4">Personal Data Settings</h3>
+							@RenderBody()
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	@RenderSection("Scripts", required: false)
+
+	<script src="~/lib/jquery-3.7.0.min.js"></script>
+
+
+	<script>
+	function clearLocalStorage() {
+		if (!window.location.href.includes('Identity/Account/Manage')){
+			localStorage.removeItem('activeTab');
+		}
+	}
+	window.addEventListener('load', clearLocalStorage);
+
+	$(document).ready(function () {
+		// Check if there is a stored active tab
+		var activeTab = localStorage.getItem('activeTab');
+		if (activeTab) {
+		// Set the stored active tab as active
+			$('.nav-link').removeClass('active');
+			$('#' + activeTab).addClass('active');
+		}
+
+		$('.nav-link').click(function () {
+			// Change the active tab
+			$('.nav-link').removeClass('active');
+			$(this).addClass('active');
+
+			// Store the active tab in local storage
+			localStorage.setItem('activeTab', $(this).attr('id'));
+		});
+	});
+	</script>
+</body>
+</html>
+

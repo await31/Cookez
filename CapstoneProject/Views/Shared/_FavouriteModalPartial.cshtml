@@ -1,0 +1,43 @@
+﻿<div class="favourite-modal modal fade" id="favouriteModal" tabindex="-1" aria-labelledby="favouriteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content modal-color-change">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="favouriteModalLabel"><i class="fa fa-heart mx-1" style="color:red"></i>Add to Collections</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-3" style="height: 64px;">
+                    <div class="col-3" style="height:100%">
+                        <img id="favourite-recipe-image" src="" class="img-fluid" alt="Food" style="height: 100%; width: 100%;object-fit: cover;">
+                    </div>
+                    <div class="col-9 text-center" id="favourite-recipe-name" style="font-size:24px">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    Please check all the collections you want this recipe to be added
+                </div>
+                <div class="container list-container" style="">
+                    <div class="overflow-auto" style="max-height:100%">
+                        @{
+                            if (ViewBag.FavouriteList != null) {
+                                foreach (var item in ViewBag.FavouriteList) {
+                                    <div class="form-check my-5">
+                                        <label class="control control-checkbox text-color-change">
+                                            @item.Name
+                                            <input class="form-check-input favourite-checkbox" type="checkbox" checked="checked" id="favourite-checkbox-@item.Id" value="@item.Id" />
+                                            <div class="control_indicator"></div>
+                                        </label>
+                                    </div>
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button id="favourite-save" type="button" class="btn btn-primary" data-bs-dismiss="modal" data-recipe-id="0">Save</button>
+            </div>
+        </div>
+    </div>
+</div>

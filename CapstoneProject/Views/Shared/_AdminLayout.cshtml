@@ -1,0 +1,233 @@
+﻿@{
+    var currentController = ViewContext.RouteData.Values["Controller"] as string;
+    var currentAction = ViewContext.RouteData.Values["Action"] as string;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="~/lib/bootstrap-5.3.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/admin.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    <link rel="icon" type="image/x-icon" href="\images\logo.png">
+    <link rel="stylesheet" href="~/css/togglestyle.css" />
+    <script src="https://kit.fontawesome.com/08194921a9.js" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <!-- MDB -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css" rel="stylesheet" />
+    <!-- MDB -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js"></script>
+    <style>
+        hr {
+            clear: both;
+            visibility: hidden;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        .list-group-flush .active {
+            background-color: black !important;
+        }
+
+        .breadcrumb a {
+            text-decoration: none;
+            font-weight: bold;
+            color: cadetblue;
+        }
+
+        .breadcrumb {
+            margin-bottom: 0;
+        }
+
+        @@media screen and (min-width: 991.98px) {
+            main {
+                padding-left: 240px;
+            }
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            padding: 88px 0 0; /* Height of navbar */
+            box-shadow: 0 2px 5px 0 rgb(0 0 0 / 5%), 0 2px 10px 0 rgb(0 0 0 / 5%);
+            width: 240px;
+            z-index: 600;
+        }
+
+        @@media screen and (max-width: 991.98px) {
+            .sidebar {
+                width: 100%;
+            }
+        }
+
+        .sidebar .active {
+            border-radius: 5px;
+            box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
+        }
+
+        .sidebar-sticky {
+            position: relative;
+            top: 0;
+            height: calc(100vh - 48px);
+            padding-top: 0.5rem;
+            overflow-x: hidden;
+            overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+        }
+    </style>
+</head>
+<body class="dark">
+    @*<div class="container-fluid d-flex d-inline-flex">
+    <nav id="sidebarMenu"
+    class="collapse d-lg-block sidebar collapse bar-admin-change">
+    <div class="position-sticky">
+    <div class="list-group list-group-flush mx-3 mt-4">
+    <a asp-controller="Dashboard" asp-action="Index"
+    class="list-group-item list-group-item-action py-2 ripple @(currentController == "Dashboard" ? "active" : "")"
+    aria-current="true">
+    <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>Dashboard</span>
+    </a>
+    <a asp-controller="Recipes" asp-action="Index"
+    class="list-group-item list-group-item-action py-2 ripple @(currentController == "Recipes" ? "active" : "")">
+    <i class="fas fa-chart-area fa-fw me-3"></i><span>Recipes</span>
+    </a>
+    <a asp-controller="RecipeCategory" asp-action="Index"
+    class="list-group-item list-group-item-action py-2 ripple @(currentController == "RecipeCategory" ? "active" : "")">
+    <i class="fas fa-chart-area fa-fw me-3"></i><span>Recipe Categories</span>
+    </a>
+    <a asp-controller="Ingredients" asp-action="Index"
+    class="list-group-item list-group-item-action py-2 ripple @(currentController == "Ingredients" ? "active" : "")">
+    <i class="fas fa-lock fa-fw me-3"></i><span>Ingredients</span>
+    </a>
+    <a asp-controller="IngredientCategory" asp-action="Index"
+    class="list-group-item list-group-item-action py-2 ripple @(currentController == "IngredientCategory" ? "active" : "")">
+    <i class="fas fa-lock fa-fw me-3"></i><span>Ingredient Categories</span>
+    </a>
+    <a asp-controller="AppRoles" asp-action="Index"
+    class="list-group-item list-group-item-action py-2 ripple @(currentController == "AppRoles" ? "active" : "")">
+    <i class="fas fa-chart-line fa-fw me-3"></i><span>Roles</span>
+    </a>
+    </div>
+    </div>
+    </nav>
+    <div class="container-fluid">
+    <partial name="_Notification" />
+    <breadcrumb class="mt-3 mb-0"></breadcrumb>
+    @RenderBody()
+    </div>
+    </div>*@
+    <!--Main Navigation-->
+    <header>
+        <!-- Sidebar -->
+        <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bar-admin-change">
+            <div class="position-sticky">
+                <div class="list-group list-group-flush mx-3 mt-4">
+                    <a asp-controller="Dashboard" asp-action="Index"
+                       class="list-group-item list-group-item-action py-2 ripple @(currentController == "Dashboard" ? "active" : "")"
+                       aria-current="true">
+                        <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>Dashboard</span>
+                    </a>
+                    <a asp-controller="Recipes" asp-action="Index"
+                       class="list-group-item list-group-item-action py-2 ripple @(currentController == "Recipes" ? "active" : "")">
+                        <i class="fas fa-chart-area fa-fw me-3"></i><span>Recipes</span>
+                    </a>
+                    <a asp-controller="RecipeCategory" asp-action="Index"
+                       class="list-group-item list-group-item-action py-2 ripple @(currentController == "RecipeCategory" ? "active" : "")">
+                        <i class="fas fa-chart-area fa-fw me-3"></i><span>Recipe Categories</span>
+                    </a>
+                    <a asp-controller="Ingredients" asp-action="Index"
+                       class="list-group-item list-group-item-action py-2 ripple @(currentController == "Ingredients" ? "active" : "")">
+                        <i class="fas fa-lock fa-fw me-3"></i><span>Ingredients</span>
+                    </a>
+                    <a asp-controller="IngredientCategory" asp-action="Index"
+                       class="list-group-item list-group-item-action py-2 ripple @(currentController == "IngredientCategory" ? "active" : "")">
+                        <i class="fas fa-lock fa-fw me-3"></i><span>Ingredient Categories</span>
+                    </a>
+                    <a asp-controller="AppRoles" asp-action="Index"
+                       class="list-group-item list-group-item-action py-2 ripple @(currentController == "AppRoles" ? "active" : "")">
+                        <i class="fas fa-chart-line fa-fw me-3"></i><span>Roles</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+        <!-- Sidebar -->
+        <!-- Navbar -->
+        <nav id="main-navbar" class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+            <!-- Container wrapper -->
+            <div class="container-fluid">
+                <!-- Navbar brand -->
+                <a class="navbar-brand mt-2 mt-lg-0" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="\images\logo.png"
+                         height="80"
+                         alt="Cookez Logo"
+                         loading="lazy" />
+                </a>
+
+                <!-- Toggle button -->
+                <button class="navbar-toggler"
+                        type="button"
+                        data-mdb-toggle="collapse"
+                        data-mdb-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <!-- Collapsible wrapper -->
+                <div class="collapse navbar-collapse container-fluid justify-content-between text-center" id="navbarSupportedContent">
+                    <!-- Search -->
+                    <form class="d-flex form-outline pb-2" asp-controller="UserRecipes" asp-action="Filter">
+                        <input type="search"
+                               class="form-control rounded border"
+                               id="SearchString"
+                               name="SearchString"
+                               placeholder="What do you want to eat today?"
+                               aria-label="Search"
+                               aria-describedby="search-addon" value="@ViewData["FilterSearch"]" />
+                        <button class="btn btn-dark ms-2 rounded" type="submit" value="Find"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </form>
+
+                    <div class="d-flex justify-content-between">
+                        <div class="load-flash"></div>
+                        <div class="mode-toggle noselect">
+                            <h6 class="label-dark m-0">Dark</h6>
+                            <div class="toggle-switch"></div>
+                            <h6 class="label-light m-0">Light</h6>
+                        </div>
+
+                        <div class="d-flex">
+                            <partial name="_LoginPartial" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Container wrapper -->
+        </nav>
+        <!-- Navbar -->
+    </header>
+    <!--Main Navigation-->
+    <!--Main layout-->
+    <main style="margin-top: 80px;">
+        <div class="container pt-4">
+            <partial name="_Notification" />
+            <breadcrumb class="mt-3 mb-0"></breadcrumb>
+            @RenderBody()
+        </div>
+    </main>
+    <!--Main layout-->
+    <script src="~/lib/jquery-3.7.0.min.js"></script>
+    <script src="~/lib/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="~/js/togglescript.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+</body>
+</html>

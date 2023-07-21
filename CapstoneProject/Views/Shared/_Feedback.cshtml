@@ -1,0 +1,74 @@
+﻿@model IEnumerable<BusinessObjects.Models.RecipeFeedback>
+
+@inject SignInManager<BusinessObjects.Models.Account> SignInManager
+@using Microsoft.AspNetCore.Identity;
+@inject UserManager<BusinessObjects.Models.Account> UserManager
+@{
+    BusinessObjects.Models.Pager pager = new BusinessObjects.Models.Pager();
+    int pageNo = 0;
+    if (ViewBag.Pager != null) {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+}
+@if (Model != null) {
+    @foreach (var feedback in Model) {
+        <div class="mt-2 px-4">
+            <div class="d-flex flex-row py-4">
+                <div class="d-flex w-100 justify-content-around">
+                    <div class="">
+                        <img src="@feedback.User?.ImgPath" width="50" height="50" class="rounded-circle">
+                    </div>
+                    <div class="col-8 rounded-4" style="background-color: #e7f9fd;">
+                        @if (SignInManager.IsSignedIn(User)) {
+                            <a asp-controller="Home" asp-action="UserProfile" asp-route-userId="@feedback.UserId" class="text-decoration-none text-dark row">
+                                <span class="ms-2 fw-bold label-font">@feedback.User?.UserName</span>
+                                </a>
+                                } else {
+                                <span class="ms-2 fw-bold label-font">@feedback.User?.UserName</span>
+                                }
+                                <p class="text-justify comment-text mb-0 ms-2">@feedback.Description</p>
+                        </div>
+                            @if (UserManager.GetUserId(User) == feedback.UserId) {
+                            <div>
+                                <button class="btn btn-link dropdown-toggle"
+                                        type="button"
+                                        id="dropdownMenuButton"
+                                        data-mdb-toggle="dropdown"
+                                        aria-expanded="false">
+                                </button>
+                                <ul class="dropdown-menu p-0">
+                                    <li>
+                                        <button onclick="deleteFeedback(this)" data-recipe-id="@ViewData["RecipeId"]" data-feedback-id="@feedback.Id" class="btn h-100 w-100">Delete</button>
+                                    </li>
+                                </ul>
+                            </div>
+                            } else {
+                        <div>
+                            <button class="btn btn-link dropdown-toggle"
+                                    type="button"
+                                    id="dropdownMenuButton"
+                                    data-mdb-toggle="dropdown"
+                                    disabled
+                                    aria-expanded="false">
+                            </button>
+                            <ul class="dropdown-menu p-0">
+                                <li>
+                                </li>
+                            </ul>
+                        </div>
+                            }
+                    </div>
+                </div>
+            </div>
+                        } @*End of for each*@
+
+        <div class="m-4 me-5">
+            <partial name="_Pager" model="@pager" />
+        </div>
+        <div>
+            <partial name="_Notification">
+        </div>
+        }
+        <script type="text/javascript">
+        </script>

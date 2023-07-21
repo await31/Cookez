@@ -1,0 +1,527 @@
+﻿@model IEnumerable<BusinessObjects.Models.Recipe>
+@inject SignInManager<BusinessObjects.Models.Account> SignInManager
+@using Microsoft.AspNetCore.Identity;
+@inject UserManager<BusinessObjects.Models.Account> UserManager
+
+@{
+    var parameters = string.IsNullOrEmpty(Context.Request.Path) ? "" : $"{Context.Request.QueryString.Value}";
+    var hotRecipe = ViewData["HotRecipe"] as BusinessObjects.Models.Recipe;
+    ViewData["Title"] = "Cookez";
+}
+
+<link rel="stylesheet" href="~/css/favouritemodal.css" />
+<link rel="stylesheet" href="~/css/togglestyle.css"/>
+
+<style>
+    .wrapper textarea {
+        width: 100%;
+        resize: none;
+    }
+
+    textarea {
+        border: solid 1px black;
+    }
+
+    textarea::-webkit-scrollbar {
+       width: 0px;
+    }
+
+    .card-text-custom {
+        max-height: 300px;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .background {
+        margin-top: 8%;
+        display: flex;
+        max-height: 100vh;
+    }
+
+    .container {
+        flex: 0 1 700px;
+        margin: auto;
+        padding: 10px;
+    }
+
+    .screen {
+        position: relative;
+        background: #e7f9fd;
+        border-radius: 15px;
+    }
+
+        .screen:after {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 20px;
+            right: 20px;
+            bottom: 0;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, .4);
+            z-index: -1;
+        }
+
+    .screen-header {
+        display: flex;
+        align-items: center;
+        padding: 10px 20px;
+        background: #4d4d4f;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+    }
+
+    .screen-header-left {
+        margin-right: auto;
+    }
+
+    .screen-header-button {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        margin-right: 3px;
+        border-radius: 8px;
+        background: white;
+    }
+
+        .screen-header-button.close {
+            background: #e7f9fd;
+        }
+
+        .screen-header-button.maximize {
+            background: #e8e925;
+        }
+
+        .screen-header-button.minimize {
+            background: #74c54f;
+        }
+
+    .screen-header-right {
+        display: flex;
+    }
+
+    .screen-header-ellipsis {
+        width: 3px;
+        height: 3px;
+        margin-left: 2px;
+        border-radius: 8px;
+        background: #999;
+    }
+
+    .screen-body {
+        display: flex;
+    }
+
+    .screen-body-item {
+        flex: 1;
+        padding: 50px;
+    }
+
+        .screen-body-item.left {
+            display: flex;
+            flex-direction: column;
+        }
+
+    .app-title {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        color: #3e3e3e;
+        font-size: 26px;
+    }
+
+        .app-title:after {
+            content: '';
+            display: block;
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            width: 25px;
+            height: 4px;
+            background: #3e3e3e;
+        }
+
+    .app-contact {
+        margin-top: auto;
+        font-size: 8px;
+        color: #888;
+    }
+
+    .app-form-group {
+        margin-bottom: 15px;
+    }
+
+        .app-form-group.message {
+            margin-top: 40px;
+        }
+
+        .app-form-group.buttons {
+            margin-bottom: 0;
+            text-align: right;
+        }
+
+    .app-form-control {
+        width: 100%;
+        padding: 10px 0;
+        background: none;
+        border: none;
+        border-bottom: 1px solid #666;
+        color: #ddd;
+        font-size: 14px;
+        text-transform: uppercase;
+        outline: none;
+        transition: border-color .2s;
+    }
+
+        .app-form-control::placeholder {
+            color: #666;
+        }
+
+        .app-form-control:focus {
+            border-bottom-color: #ddd;
+        }
+
+    .app-form-button {
+        background: none;
+        border: none;
+        color: #e7f9fd;
+        font-size: 14px;
+        cursor: pointer;
+        outline: none;
+    }
+
+        .app-form-button:hover {
+            color: #e7f9fd;
+        }
+
+    .credits {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+        color: #888;
+        font-family: 'Roboto Condensed', sans-serif;
+        font-size: 16px;
+        font-weight: normal;
+    }
+
+    .credits-link {
+        display: flex;
+        align-items: center;
+        color: #fff;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .dribbble {
+        width: 20px;
+        height: 20px;
+        margin: 0 5px;
+    }
+
+    hr {
+        border-color: rgba(255,255,255,.6);
+    }
+</style>
+@if (hotRecipe != null) {
+    <div class="card col-md-12 rounded-5 overflow-hidden border-0 mb-5 mt-3">
+        <div class="row g-0">
+            <div class="col-lg-6" style="background-color: #e7f9fd;">
+                <div class="card-body ms-5 mt-4 h-100">
+                    <button type="button" class="pe-none btn btn-warning shadow rounded-5">
+                        <i class=" fa-solid fa-fire text-danger bg-warning"></i> <span class="fw-bold">Hot Recipe</span>
+                    </button>
+                    <h1 class="mt-5 mb-0 card-title">@hotRecipe.Name</h1>
+                    <p class="card-text mb-4">
+                        <div class="card-text-custom">@Html.Raw(hotRecipe.Description)</div>
+                    </p>
+                    <button type="button" class="btn rounded-5" style="background-color: #dbedf1;">
+                        @if (hotRecipe.PrepTime < 360) {
+                            <i class="fa-solid fa-clock"></i> <span class="text-dark">@hotRecipe.PrepTime minutes</span>
+                        } else {
+                            <i class="fa-solid fa-clock"></i> <span class="text-dark">@(hotRecipe.PrepTime / 60) hours</span>
+                        }
+                    </button>
+                    <button type="button" class="btn rounded-5" style="background-color: #dbedf1;">
+                        <i class="fa-solid fa-utensils"></i> <span class="text-dark">@hotRecipe.FkRecipeCategory.Name</span>
+                    </button>
+                    <div class="row me-5 justify-content-center" style="margin-top: 14%;">
+                        <div class="d-flex col-8">
+                            @if (@hotRecipe.FkUser != null) {
+                                if (SignInManager.IsSignedIn(User)) {
+                                    <a asp-action="UserProfile" asp-route-userId="@hotRecipe.FkUserId" class="text-decoration-none text-dark d-flex">
+                                        <img src="@hotRecipe.FkUser.ImgPath" class="rounded-circle" style="height: 50px; width: 50px;" alt="Food">
+                                        <div class="ms-2 user-info">
+                                            <p class="fw-bold mb-0">@hotRecipe.FkUser.UserName</p>
+                                            <p class="text-secondary mb-0">@hotRecipe.CreatedDate?.ToShortDateString()</p>
+                                        </div>
+                                    </a>
+                                } else {
+                                    <a asp-area="Identity" asp-page="/Account/Login" class="text-decoration-none text-dark d-flex">
+                                        <img src="@hotRecipe.FkUser.ImgPath" class="rounded-circle" style="height: 50px; width: 50px;" alt="Food">
+                                        <div class="ms-2 user-info">
+                                            <p class="fw-bold mb-0">@hotRecipe.FkUser.UserName</p>
+                                            <p class="text-secondary mb-0">@hotRecipe.CreatedDate?.ToShortDateString()</p>
+                                        </div>
+                                    </a>
+                                }
+                            } 
+                        </div>
+                        <a type="button" class="btn btn-dark btn-lg rounded-3 col-lg-4" asp-controller="UserRecipes" asp-action="Details" asp-route-id="@hotRecipe.Id">
+                            <span class="text-light">View Detail</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <img src="@hotRecipe.ImgPath" style="max-height:710px;" class="img-fluid h-100 w-100" alt="Food">
+            </div>
+        </div>
+    </div>
+}
+<hr />
+<div class="col-md-12 mt-5 mb-5">
+    <div class="row d-flex mb-4">
+        <h1 class="text-center label-font">Ingredient Categories</h1>
+    </div>
+    <div class="container text-center">
+        <div class="row row-cols-2 row-cols-lg-5 gy-5 g-lg-3 dark">
+            <div class="col">
+                <div class="mx-3 shadow-sm rounded-4 p-3" style="height:100%; background: rgb(255 118 118 / 41%);">
+                    <a class="text-decoration-none" asp-action="ViewIngredient" asp-route-id="1">
+                        <img src="~/images/category-protein.png" class="img-fluid w-100 h-50" />
+                        <p class="fw-bold fs-4 pt-4 text-danger label-font darkmode-shadow">Protein</p>
+                    </a>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mx-3 shadow-sm rounded-4 p-3" style="height:100%; background: rgb(255 243 116 / 41%);">
+                    <a class="text-decoration-none text-dark" asp-action="ViewIngredient" asp-route-id="2">
+                        <img src="~/images/category-carb.png" class="img-fluid w-100 h-50" />
+                        <p class="fw-bold fs-4 pt-4 label-font darkmode-shadow" style="color: #dec418;">Carbs</p>
+                    </a>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mx-3 shadow-sm rounded-4 p-3" style="height:100%; background: rgb(150 255 81 / 41%);">
+                    <a class="text-decoration-none text-dark" asp-action="ViewIngredient" asp-route-id="3">
+                        <img src="~/images/category-fiber.png" class="img-fluid w-100 h-50" />
+                        <p class="fw-bold fs-4 pt-4 text-success label-font darkmode-shadow">Fibre</p>
+                    </a>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mx-3 shadow-sm rounded-4 p-3" style="height:100%; background:rgba(192,246,255,0.4086426807050946);">
+                    <a class="text-decoration-none text-dark" asp-action="ViewIngredient" asp-route-id="4">
+                        <img src="~/images/category-fat.png" class="img-fluid w-100 h-50" />
+                        <p class="fw-bold fs-4 pt-4 text-info label-font darkmode-shadow">Fat</p>
+                    </a>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mx-3 shadow-sm rounded-4 p-3" style="height:100%; background: rgb(255 150 75 / 41%);">
+                    <a class="text-decoration-none text-dark" asp-action="ViewIngredient" asp-route-id="5">
+                        <img src="~/images/category-spices.png" class="img-fluid w-100 h-50" />
+                        <p class="fw-bold fs-4 pt-4 label-font darkmode-shadow" style="color: darkorange;">Spices</p>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<hr />
+<div class="col-md-12 mt-5 mb-5 h-auto">
+    <div class="row d-flex mb-5">
+        <h1 class="text-center label-font">Latest Recipes</h1>
+    </div>
+</div>
+
+<!--start div-->
+<div class="container text-center">
+    <div class="row row-cols-1 row-cols-lg-4 g-5 g-lg-3">
+        @foreach (var recipe in Model) {
+            <div class="col overflow-hidden border-0">
+                <div class="card border-0 rounded rounded-5 mx-1" style="background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(192,246,255,0.4086426807050946) 100%); height: 400px;">
+                    <div class="position-relative" style="height: 60%;">
+                        @if (SignInManager.IsSignedIn(User)) {
+                            <div class="position-absolute rounded-circle bg-light p-2 pb-1" style="top: 3%; right: 3%;">
+                                <button class="unstyled-button add-favourite-button" data-bs-toggle="modal" data-bs-target="#favouriteModal" data-recipe-id="@recipe.Id"
+                                        data-recipe-imgpath="@recipe.ImgPath" data-recipe-name="@recipe.Name">
+                                    <i id="favourite-icon-@recipe.Id" class="fa fa-heart-o" style="font-size:32px;color:red"></i>
+                                </button>
+                            </div>
+                        }
+                        <img src="@recipe.ImgPath" class="img-fluid card-img-top" alt="Food" style="height: 100%;">
+                    </div>
+                    <div class="mt-2" style="height: 40%;">
+                        <a asp-controller="UserRecipes" asp-action="Details" asp-route-id="@recipe.Id" class="text-decoration-none h-100" target="_blank">
+                            <div class="card-body pb-4 pt-3">
+                                <h4 class="card-title text-dark text-decoration-none text-center" style="font-family: Bahnschrift; white-space:nowrap; overflow: hidden; text-overflow:ellipsis;">@recipe.Name</h4>
+                                <div class="d-flex row mt-5 mb-3">
+                                    <div class="rounded-5 col-6 text-dark px-0">
+                                        @if (recipe.PrepTime < 360) {
+                                            <i class="fa-solid fa-clock"></i> <span class="text-dark" style="font-size: 14px;">@recipe.PrepTime minutes</span>
+                                        } else {
+                                            <i class="fa-solid fa-clock"></i> <span class="text-dark" style="font-size: 14px;">@(recipe.PrepTime / 60) hours</span>
+                                        }
+                                    </div>
+                                    <div class="rounded-5 col-6 text-dark px-0">
+                                        <i class="fa-solid fa-utensils"></i> <span class="text-dark" style="font-size: 14px;">@recipe.FkRecipeCategory?.Name</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<!--end div-->
+
+<!-- Modal -->
+<partial name="_FavouriteModalPartial" />
+<script src="~/lib/jquery-3.7.0.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+<script type="text/javascript">
+    function removeParameterFromUrl(urlString, parameterName, parameterValue) {
+        const url = new URL(urlString);
+        const parameterValues = url.searchParams.get(parameterName).split(',');
+        const updatedParameterValues = parameterValues.filter((item) => item != parameterValue);
+        url.searchParams.set(parameterName, updatedParameterValues.join(','));
+        return url.href;
+    }
+    $(document).ready(function () {
+        UpdateIcon();
+        //This function will update the recipe id of modal
+        //also unchecked all checkboxes
+        $('.add-favourite-button').click(function () {
+            var recipeId = $(this).data('recipe-id');
+            var recipeName = $(this).data('recipe-name');
+            var recipeImg = $(this).data('recipe-imgpath');
+            document.getElementById("favourite-recipe-name").innerHTML = recipeName;
+            document.getElementById("favourite-recipe-image").src = recipeImg;
+            $("#favourite-save").attr("data-recipe-id", recipeId);
+            UpdateCheckbox(recipeId);
+        });
+        //This function will add the recipe into all selected favourite lists on clicking button with class add-favourite
+        //currently only add in favourite list
+        $('#favourite-save').click(function () {
+            var recipeId = document.getElementById("favourite-save").dataset.recipeId;
+            //Get all checked boxes' favourite ids
+            var favouriteIds = $('input.favourite-checkbox:checkbox:checked').map(function () {
+                return $(this).val();
+            }).get();
+            //Get all boxes' favourite ids
+            var allfavouriteIds = $('.favourite-checkbox').map(function () {
+                return $(this).val();
+            }).get();
+            $.ajax({
+                url: '/Favourites/AddRecipe',
+                type: 'POST',
+                data: { recipeId: recipeId, favouriteIds: favouriteIds, allfavouriteIds: allfavouriteIds },
+                success: UpdateIcon,
+                error: function () {
+                    alert('Error adding recipes to favorites.');
+                }
+            });
+        });
+    });
+    function UpdateCheckbox(recipeId) {
+        var favouriteIds = $('.favourite-checkbox').map(function () {
+            return $(this).val();
+        }).get();
+        $('.favourite-checkbox').prop('checked', false); // Unchecks all boxes
+
+        $.ajax({
+            url: '/Favourites/GetAllFavouriteLists',
+            type: 'POST',
+            data: { recipeId: recipeId, favouriteIds: favouriteIds },
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].isFavorite) {
+                        $('#favourite-checkbox-' + data[i].id).prop('checked', true); // Checks all boxes
+                    }
+                }
+            },
+            error: function () {
+                alert('Error getting favorite status.');
+            }
+        });
+    };
+    function UpdateIcon() {
+        var recipeId = @Html.Raw(Json.Serialize(@Model.Select(r=> r.Id).ToArray()));
+
+        $.ajax({
+            url: '/Favourites/GetAllFavouriteRecipes',
+            type: 'POST',
+            data: { recipeIds: recipeId },
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].isFavorite) {
+                        $('#favourite-icon-' + data[i].recipeId).addClass('fa-heart');
+                        $('#favourite-icon-' + data[i].recipeId).removeClass('fa-heart-o');
+                    }
+                    else {
+                        $('#favourite-icon-' + data[i].recipeId).removeClass('fa-heart');
+                        $('#favourite-icon-' + data[i].recipeId).addClass('fa-heart-o');
+                    }
+                }
+            },
+            error: function () {
+                alert('Error getting favorite status.');
+            }
+        });
+    }
+
+    $("#sendContactBtn").click(function () {
+        // Get the form values
+        var name = $("#name").val();
+        var email = $("#email").val();
+        var message = $("#message").val();
+        var userId = $("#userid").val();
+        console.log(name + email + message + userId);
+
+        var formData = new FormData();
+        formData.append("UserName", name);
+        formData.append("Email", email);
+        formData.append("Message", message);
+        formData.append("UserId", userId);
+
+        console.log(formData);
+
+
+        $.ajax({
+            url: '/Contacts/CreateAjax',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response.success) {
+                    // Handle success response
+                    alert('Contact created successfully!');
+                } else {
+                    // Handle failure response
+                    alert('Failed to create contact.');
+                }
+            },
+
+            error: function (xhr, status, error) {
+                // Handle error
+                alert('An error occurred while creating the contact.');
+            }
+        });
+        // Clear input values
+        $("#name").val("");
+        $("#email").val("");
+        $("#message").val("");
+        $("#userid").val("");
+
+    });
+</script>
+

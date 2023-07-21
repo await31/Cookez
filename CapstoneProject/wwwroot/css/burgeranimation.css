@@ -1,0 +1,7 @@
+﻿#burger {
+    position: fixed;
+    top: 60%;
+    right: 5%;
+    z-index: 9999;
+}
+

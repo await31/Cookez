@@ -1,0 +1,66 @@
+﻿﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<BusinessObjects.Models.Account> SignInManager
+@inject UserManager<BusinessObjects.Models.Account> UserManager
+@{
+    var user = UserManager.GetUserAsync(User).Result;
+}
+<style>
+    hr {
+        color: black;
+    }
+</style>
+@if (SignInManager.IsSignedIn(User))
+{
+    <div class="align-self-center">
+        <a class="text-decoration-none btn btn-success text-light btn-sm me-1 p-2" style="min-width: max-content" asp-controller="UserRecipes" asp-action="Create"><i class="fa-solid fa-plus"></i> New recipe</a>
+    </div>
+    <div class="btn-group"></div>
+    <div class="dropdown align-self-center">
+        <button class="btn btn-white dropdown-toggle border-0 p-0 "
+                type="button"
+                data-mdb-toggle="dropdown"
+                data-mdb-display="static"
+                aria-expanded="false">
+            <img src="@user.ImgPath" class="img-responsive rounded-circle" style="width: 60px; height: 60px;" alt="avatar">
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-end">
+            <li>
+                <a type="button" id="manage" class="dropdown-item text-dark" asp-controller="Home" asp-action="UserProfile" asp-route-userId="@user.Id" title="Preview">@user.UserName <i class="fa-regular fa-id-card"></i></a>
+            </li>
+            @if (UserManager.IsInRoleAsync(user, "Admin").Result)
+            {
+                <li>
+                    <a type="button" class="dropdown-item text-dark text-decoration-none py-1 pe-5" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+                </li>
+            }
+            <li class="mt-1">
+                <a type="button" id="manage" class="dropdown-item text-dark ps-3 py-1" asp-controller="Home" asp-action="MyRecipes" title="My Recipes">Manage recipes</a>
+            </li>
+            <li class="mt-0">
+                <a type="button" id="manage" class="dropdown-item text-dark ps-3 py-1" asp-controller="MealPlan" asp-action="Index" title="My Planning">Manage planning</a>
+            </li>
+            <li class="mt-0">
+                <a type="button" id="manage" class="dropdown-item text-dark ps-3 py-1" asp-controller="Favourites" asp-action="Index" title="My Collections">Manage collections</a>
+            </li>
+            <li class="mt-0">
+                <a type="button" id="manage" class="dropdown-item text-dark ps-3 py-1" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Settings</a>
+            </li>
+            <li style="height: 0.5px; width: 100%; opacity: 0.5;" class="bg-secondary mt-2"></li>
+            <li>
+                <form type="button" id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                    <button id="logout" type="submit" class="dropdown-item text-dark text-decoration-none ps-3 w-100 text-start">Log out</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+    <script src="~/lib/bootstrap-5.3.0/js/bootstrap.bundle.min.js"></script>
+}
+else
+{
+    <div class="container-fluid text-center d-flex">
+        <a class="btn btn-outline-dark px-2 mb-1 me-2" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        <a class="btn btn-dark px-2 mb-1" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
+    </div>
+}
+

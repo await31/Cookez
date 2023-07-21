@@ -1,0 +1,418 @@
+﻿﻿﻿﻿@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model IEnumerable<Recipe>
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    </div>
+    <!-- Content Row -->
+    <div class="row">
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col me-2">
+                            <div class="text-xs fw-bold text-primary text-uppercase mb-1">
+                                Number of users
+                            </div>
+                            <p class="h5 mb-0 fw-bold text-color-change">@ViewData["accCount"]</p>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa-solid fa-user fa-2x text-secondary"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col me-2">
+                            <div class="text-xs fw-bold text-success text-uppercase mb-1">
+                                Number of recipes
+                            </div>
+                            <div class="h5 mb-0 fw-bold text-color-change">@ViewData["RecipesCount"]</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa-solid fa-bowl-food fa-2x text-secondary"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col me-2">
+                            <div class="text-xs fw-bold text-info text-uppercase mb-1">
+                                Number of ingredients
+                            </div>
+                            <div class="h5 mb-0 fw-bold text-color-change">@ViewData["IngredientsCount"]</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa-solid fa-wheat-awn fa-2x text-secondary"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Requests Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs fw-bold text-warning text-uppercase mb-1">
+                                Recipe Pending Requests
+                            </div>
+                            <div class="h5 mb-0 fw-bold text-color-change">@ViewData["PendingRequestsCount"]</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa-solid fa-comments fa-2x text-secondary"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <!-- Content Column -->
+        <div class="col-lg-6 mb-4">
+
+            <!-- Project Card Example -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Pending Recipe</h6>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-striped w-100">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Name</th>
+                                <th>Owner</th>
+                                <th colspan="3">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model) {
+                                if (item.Status != null) {
+                                    <tr>
+                                        <td>
+                                            @item.Name
+                                        </td>
+                                        <td>
+                                            @item.FkUser
+                                        </td>
+                                        <td>
+                                            <a asp-controller="Recipes" asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a>
+                                        </td>
+                                        <td>
+                                            <form method="post" asp-controller="Recipes" asp-action="Approve">
+                                                <input type="hidden" name="id" value="@item.Id" />
+                                                <button type="submit" class="btn btn-success">Approve</button>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <form method="post" asp-controller="Recipes" asp-action="Deny">
+                                                <input type="hidden" name="id" value="@item.Id" />
+                                                <button type="submit" class="btn btn-danger">Deny</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-lg-6 mb-4">
+
+            <!-- Illustrations -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Pending Ingredient</h6>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-striped w-100">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th colspan="3">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                var pendingIngredients = ViewData["IngredientsPending"] as IEnumerable<Ingredient>;
+                            }
+                            @foreach (var item in pendingIngredients) {
+                                if (item.Status != null) {
+                                    <tr>
+                                        <td>
+                                            @item.Name
+                                        </td>
+                                        <td>
+                                            @item.FkCategory
+                                        </td>
+                                        <td>
+                                            <a asp-controller="Ingredients" asp-action="Detail" asp-route-id="@item.Id" class="btn btn-info">Details</a>
+                                        </td>
+                                        <td>
+                                            <form method="post" asp-controller="Ingredients" asp-action="Approve">
+                                                <input type="hidden" name="id" value="@item.Id" />
+                                                <button type="submit" class="btn btn-success">Approve</button>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <form method="post" asp-controller="Ingredients" asp-action="Deny">
+                                                <input type="hidden" name="id" value="@item.Id" />
+                                                <button type="submit" class="btn btn-danger">Deny</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+        <!-- Content Column -->
+        <div class="col-lg-6 mb-4">
+
+            <!-- Project Card Example -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Contact from user</h6>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-striped w-100">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th colspan="2">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                var contact = ViewData["Contact"] as IEnumerable<Contact>;
+                            }
+                            @foreach (var item in contact) {
+                                <tr>
+                                    <td>
+                                        @item.UserName
+                                    </td>
+                                    <td>
+                                        @item.Email
+                                    </td>
+                                    <td>
+                                        <form asp-action="Details" asp-controller="Contacts">
+                                            <input type="hidden" name="id" value="@item.Id" />
+                                            <button type="submit" class="btn btn-success">Detail</button>
+                                        </form>
+                                    </td>
+
+                                    <td>
+                                        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#deleteConfirm">
+                                            Delete
+                                        </button>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="deleteConfirm" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLongTitle">Delete</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form id="deleteConfirmForm" asp-action="DeleteConfirmed" asp-controller="Contacts">
+                                                            <input type="hidden" name="id" value="@item.Id" />
+                                                        </form>
+
+                                                        Please confirm your intention to delete the contact form by clicking the "Confirm" button in the delete confirmation modal.
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                        <button id="submitDeleteFormBtn" type="button" class="btn btn-primary">Confirm</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!--Chart-->
+    <div class="row">
+        <div class="col-sm-12 col-lg-6 mb-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Ingredient Chart</h6>
+                </div>
+                <div class="card-body">
+                    <canvas id="ingredientChart" style=" width: 100%;"></canvas>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-lg-6 mb-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Recipe Chart</h6>
+                </div>
+                <div class="card-body">
+                    <canvas id="recipeChart" style=" width: 100%;"></canvas>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12  mb-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Monthly Chart</h6>
+                </div>
+                <div class="card-body">
+                    <canvas id="recipeLineChart" style=" width: 100%;"></canvas>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- /.container-fluid -->
+<!-- End of Main Content -->
+<script src="~/lib/jquery-3.7.0.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    var chartData = @Html.Raw(ViewBag.IngredientChartData);
+
+    var ctx = document.getElementById('ingredientChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: chartData.map(data => data.Label),
+            datasets: [{
+                data: chartData.map(data => data.Value),
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.6)',
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(255, 206, 86, 0.6)',
+                    'rgba(75, 192, 192, 0.6)',
+                    'rgba(153, 102, 255, 0.6)',
+                    'rgba(255, 159, 64, 0.6)',
+                    'rgba(255, 0, 0, 0.6)',
+                    'rgba(0, 255, 0, 0.6)',
+                    'rgba(0, 0, 255, 0.6)',
+                    'rgba(128, 128, 128, 0.6)'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false, // Set this to false to control the width and height manually
+            aspectRatio: 1.5, // Specify the desired aspect ratio (width:height) of the chart
+            width: 400, // Specify the desired width of the chart
+            height: 300 // Specify the desired height of the chart
+        }
+    });
+
+    var chartData2 = @Html.Raw(ViewBag.RecipeChartData);
+    var ctx2 = document.getElementById('recipeChart').getContext('2d');
+    var myChart2 = new Chart(ctx2, {
+        type: 'doughnut',
+        data: {
+            labels: chartData2.map(data => data.Label),
+            datasets: [{
+                data: chartData2.map(data => data.Value),
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.6)',
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(255, 206, 86, 0.6)',
+                    'rgba(75, 192, 192, 0.6)',
+                    'rgba(153, 102, 255, 0.6)',
+                    'rgba(255, 159, 64, 0.6)',
+                    'rgba(255, 0, 0, 0.6)',
+                    'rgba(0, 255, 0, 0.6)',
+                    'rgba(0, 0, 255, 0.6)',
+                    'rgba(128, 128, 128, 0.6)'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false, // Set this to false to control the width and height manually
+            aspectRatio: 1.5, // Specify the desired aspect ratio (width:height) of the chart
+            width: 400, // Specify the desired width of the chart
+            height: 300 // Specify the desired height of the chart
+        }
+
+    });
+
+    var lineChartLable = @Html.Raw(ViewBag.RecipeLineChartLabels);
+    var lineChartData = @Html.Raw(ViewBag.RecipeLineChartData);
+
+    var ctx3 = document.getElementById('recipeLineChart').getContext('2d');
+    var myChart3 = new Chart(ctx3, {
+        type: 'line',
+        data: {
+            labels: lineChartLable,
+            datasets: [{
+                label: 'Recipes',
+                data: lineChartData,
+                fill: false,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100
+                }
+            }
+        }
+    });
+</script>
+<script>
+    $("#submitDeleteFormBtn").click(function () {
+        $("#deleteConfirmForm").submit(); // Submit the form
+    });
+
+</script>

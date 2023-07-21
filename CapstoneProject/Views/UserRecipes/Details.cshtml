@@ -1,0 +1,552 @@
+﻿@model BusinessObjects.Models.Recipe
+
+@inject SignInManager<BusinessObjects.Models.Account> SignInManager
+@using Microsoft.AspNetCore.Identity;
+@inject UserManager<BusinessObjects.Models.Account> UserManager
+
+@{
+    ViewData["Title"] = "Recipe Details";
+}
+
+<link rel="stylesheet" href="~/css/favouritemodal.css" />
+<style>
+    body {
+        background-color: #eee;
+    }
+
+    .card {
+        background-color: #fff;
+        border: none;
+    }
+
+    .printer {
+        color: black;
+    }
+
+    .facebook {
+        color: #3b5998;
+    }
+
+    .form-color {
+        background-color: #fafafa;
+    }
+
+    .form-control {
+        height: 48px;
+        border-radius: 25px;
+    }
+
+        .form-control:focus {
+            color: #495057;
+            background-color: #fff;
+            border-color: #35b69f;
+            outline: 0;
+            box-shadow: none;
+            text-indent: 10px;
+        }
+
+    .c-badge {
+        background-color: #35b69f;
+        color: white;
+        height: 20px;
+        font-size: 11px;
+        width: 92px;
+        border-radius: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 2px;
+    }
+
+    .comment-text {
+        font-size: 13px;
+    }
+
+    .wish {
+        color: #35b69f;
+    }
+
+
+    .user-feed {
+        font-size: 14px;
+        margin-top: 12px;
+    }
+
+    @@media (max-width: 992px) {
+        a {
+            font-size: 1rem;
+        }
+
+        .table > :not(caption) > * > * {
+            padding: 1rem 0.5rem;
+        }
+    }
+</style>
+
+<!-- Carousel -->
+<div id="printableArea">
+    <div class="container" style="margin-top: 40px;">
+        <h1 style="margin-bottom: 40px;" class="label-font"> (#@Model?.Id) @Model?.Name</h1>
+        <div class="container" style="margin-bottom: 40px;">
+            <div class="row">
+                <div class="col-sm-8 col-md-9">
+                    <div class="row">
+                        @if (Model?.FkUser != null)
+                        {
+                            if (SignInManager.IsSignedIn(User))
+                            {
+                                <div class="col-md excludePrint"
+                                     style="align-self: center; padding-left: 0; margin-right: 20px; border-right: rgba(0, 0, 0, 0.15) solid 1px;">
+                                    <a asp-controller="Home" asp-action="UserProfile" asp-route-userId="@Model.FkUserId" class="text-decoration-none text-dark row">
+                                        <div class="d-flex">
+                                            <div class="d-flex align-seft-center">
+                                                <div>
+                                                    <img class="img-fluid rounded-circle"
+                                                         src="@Model?.FkUser?.ImgPath" style="height: 60px; width: 60px;">
+                                                </div>
+                                            </div>
+                                            <div class="ext-color-change ps-3">
+                                                <div class="text-color-change">
+                                                    <h5 class="text-color-change" style="font-size: 1rem;">@Model?.FkUser.UserName</h5>
+                                                    @Model.CreatedDate?.ToShortDateString()
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-md excludePrint"
+                                     style="align-self: center; padding-left: 0; margin-right: 20px; border-right: rgba(0, 0, 0, 0.15) solid 1px;">
+                                    <a asp-area="Identity" asp-page="/Account/Login" class="text-decoration-none text-dark d-flex">
+                                        <div class="d-flex">
+                                            <div class="d-flex align-self-center">
+                                                <div>
+                                                    <img class="img-fluid rounded-circle"
+                                                         src="@Model?.FkUser?.ImgPath" style="height: 60px; width: 60px;">
+                                                </div>
+                                            </div>
+                                            <div class="text-color-change ps-3">
+                                                <div>
+                                                    <h5 class="text-color-change" style="font-size: 1rem;">@Model?.FkUser.UserName</h5>
+                                                    @Model?.CreatedDate?.ToShortDateString()
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            }
+                        }
+                        <div class="col-md"
+                             style="align-self: center; padding-left: 0; margin-right: 20px; border-right: rgba(0, 0, 0, 0.15) solid 1px;">
+                            <div class="row">
+                                <div class="col-2 mt-2" style="align-self: center;">
+                                    <i class="fa-solid fa-clock"></i>
+                                </div>
+                                <div class="col-10">
+                                    <h5 class="fs-6 text-color-change">PREPARATION TIME</h5>
+                                    @if (Model?.PrepTime <= 360)
+                                    {
+                                        <p class="text-color-change">@Model?.PrepTime minutes</p>
+                                    }
+                                    else
+                                    {
+                                        <p class="text-color-change">@(Model?.PrepTime / 60) hours</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md"
+                             style="align-self: center; padding-left: 0; margin-right: 20px; border-right: rgba(0, 0, 0, 0.15) solid 1px;">
+                            <div class="row">
+                                <div class="col-2 mt-2" style="align-self: center;">
+                                    <i class="fa-solid fa-user"></i>
+                                </div>
+                                <div class="col-10">
+                                    @if (Model?.ServingSize != null)
+                                    {
+                                        <h5 class="fs-6 text-color-change">SERVING SIZE</h5>
+                                        <p class="text-color-change">For @Model?.ServingSize people</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md"
+                             style="align-self: center; padding-left: 0; margin-right: 20px; border-right: rgba(0, 0, 0, 0.15) solid 1px;">
+                            <div class="row">
+                                <div class="col-2 mt-2" style="align-self: center;">
+                                    <i class="fa-solid fa-list"></i>
+                                </div>
+                                <div class="col-10">
+                                    <h5 class="fs-6 text-color-change">CATEGORY</h5>
+                                    <p class="text-color-change">@Model?.FkRecipeCategory?.Name</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-md-3 excludePrint" style="align-self: center; padding-right: 0;">
+                    <div class="row">
+                        <div class="col-12 p-0 d-flex flex-row">
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                <button class="btn btn-sm add-favourite-button mx-1" style="background-color: #e7f9fd; height: 66px; width: 66px; border-radius: 50%;" data-bs-toggle="modal" data-bs-target="#favouriteModal" data-recipe-id="@Model?.Id"
+                                        data-recipe-imgpath="@Model?.ImgPath" data-recipe-name="@Model?.Name">
+                                    <i id="favourite-icon-@Model?.Id" class="fa fa-heart-o fa-3x" style="color:red"></i>
+                                </button>
+                            }
+                            <button class="btn btn-sm mx-1 printer" style="background: #E7FAFE; height: 66px; width: 66px; border-radius: 50%;" onclick="printDiv('printableArea')" value="Print">
+                                <i class="fa fa-print fa-3x" aria-hidden="true"></i>
+                            </button>
+
+                            @*Share via Fb*@
+                            <button class="btn btn-sm mx-1 facebook" style="background: #E7FAFE; height: 66px; width: 66px; border-radius: 50%;" onclick="window.open('http://www.facebook.com/share.php?u=' + encodeURIComponent(window.location.href))">
+                                <i class="fa-brands fa-facebook fa-3x" aria-hidden="true"></i>
+                            </button>
+
+                            @*Share via Twitter*@
+                            @*<button onclick="window.open('https://twitter.com/intent/tweet?url=' + encodeURIComponent(window.location.href));">Share on Twitter</button>*@
+
+                            @*Share via Mail*@
+                            <button type="button" class="btn btn-sm mx-1" id="share-email" style="background: #E7FAFE; border-radius: 50%;">
+                                <i class="fa fa-envelope fa-3x" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="text-align: center;">
+        <div class="col-lg-8 excludePrint">
+            <img class="img-fluid" style="border-radius: 4ch; width: 100%; max-height: 800px;"
+                 src="@Model?.ImgPath" />
+        </div>
+        <div class="col-lg-4 bg-light rounded rounded-2" style="padding: 0 40px 0 40px">
+            <h4 class="text-center label-font" style="margin-top: 40px; margin-bottom: 20px;">Nutrition Information</h4>
+            @if (Model?.Nutrition.Calories != null)
+            {
+                <div class="nutrition row justify-content-between text-color-change-black">
+                    <div class="col-4" style="text-align: left; padding: 20px 0 20px 0;">Calories</div>
+                    <div style="text-align: right; padding: 20px 0 20px 0;" class="col-4">@Model.Nutrition?.Calories kcal</div>
+                </div>
+            }
+            @if (Model?.Nutrition.Fat != null)
+            {
+                <div class="nutrition row justify-content-between text-color-change-black">
+                    <div class="col-4" style="text-align: left; padding: 20px 0 20px 0;">Fat</div>
+                    <div style="text-align: right; padding: 20px 0 20px 0;" class="col-4">@Model.Nutrition?.Fat gam</div>
+                </div>
+            }
+            @if (Model?.Nutrition.Protein != null)
+            {
+                <div class="nutrition row justify-content-between text-color-change-black">
+                    <div class="col-4" style="text-align: left; padding: 20px 0 20px 0;">Protein</div>
+                    <div style="text-align: right; padding: 20px 0 20px 0;" class="col-4">@Model.Nutrition?.Protein gam</div>
+                </div>
+            }
+            @if (Model?.Nutrition.Fibre != null)
+            {
+                <div class="nutrition row justify-content-between text-color-change-black">
+                    <div class="col-4" style="text-align: left; padding: 20px 0 20px 0;">Fibre</div>
+                    <div style="text-align: right; padding: 20px 0 20px 0;" class="col-4">@Model.Nutrition?.Fibre gam</div>
+                </div>
+            }
+            @if (Model?.Nutrition.Carbohydrate != null)
+            {
+                <div class="nutrition row justify-content-between text-color-change-black">
+                    <div class="col-4" style="text-align: left; padding: 20px 0 20px 0;">Carbohydrate</div>
+                    <div style="text-align: right; padding: 20px 0 20px 0;" class="col-4">@Model.Nutrition?.Carbohydrate gam</div>
+                </div>
+            }
+            @if (Model?.Nutrition.Cholesterol != null)
+            {
+                <div class="nutrition row justify-content-between text-color-change-black">
+                    <div class="col-4" style="text-align: left; padding: 20px 0 20px 0;">Cholesterol</div>
+                    <div style="text-align: right; padding: 20px 0 20px 0;" class="col-4">@Model.Nutrition?.Cholesterol gam</div>
+                </div>
+            }
+        </div>
+    </div>
+    <div id="printInfo" style="display:none;">
+        <h3>Ingredients</h3>
+        <table class="table border mt-3 mb-2">
+            @if (Model?.RecipeIngredients != null)
+            {
+                foreach (var item in Model.RecipeIngredients)
+                {
+                    <tr>
+                        <th class="py-2 fs-5 label-font">
+                            <a asp-controller="Home" asp-action="IngredientDetails" asp-route-id="@item?.Ingredient.FkCategoryId" asp-route-ingredientId="@item?.Ingredient.Id" target="_blank" class="text-dark">
+                                &emsp; @item.Ingredient?.Name
+                            </a>
+                        </th>
+                        <td class="py-2 fs-6 align-middle">@item.Quantity @item.UnitOfMeasure</td>
+                    </tr>
+                }
+            }
+        </table>
+        <h3>Description</h3>
+        @Html.Raw(Model?.Description)
+    </div>
+</div>
+<hr />
+<hr />
+<!-- Ingredients -->
+<section class="py-4">
+    <div class="row gx-4">
+        <div class="col-lg-8 mb-4">
+            <div class="border rounded-2 px-3 py-2 bg-white">
+                <!-- Pills navs -->
+                <ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
+                    <li class="nav-item d-flex" role="presentation">
+                        <a class="nav-link d-flex align-items-center justify-content-center w-100 active"
+                           id="ex1-tab-1" data-mdb-toggle="pill" href="#ex1-pills-1" role="tab"
+                           aria-controls="ex1-pills-1" aria-selected="true">Ingredients</a>
+                    </li>
+                    <li class="nav-item d-flex" role="presentation">
+                        <a class="nav-link d-flex align-items-center justify-content-center w-100"
+                           id="ex1-tab-2" data-mdb-toggle="pill" href="#ex1-pills-2" role="tab"
+                           aria-controls="ex1-pills-2" aria-selected="false">Instruction</a>
+                    </li>
+                </ul>
+                <!-- Pills navs -->
+                <!-- Pills content -->
+                <div class="tab-content overflow-auto" id="ex1-content" style="max-height: 845px">
+                    <div class="tab-pane fade show active" id="ex1-pills-1" role="tabpanel"
+                         aria-labelledby="ex1-tab-1">
+                        <table class="table border mt-3 mb-2">
+                            @if (Model?.RecipeIngredients != null)
+                            {
+                                foreach (var item in Model.RecipeIngredients)
+                                {
+                                    <tr>
+                                        <th class="py-2 fs-5 pe-0 label-font">
+                                            <a asp-controller="Home" asp-action="IngredientDetails" asp-route-id="@item?.Ingredient.FkCategoryId" asp-route-ingredientId="@item?.Ingredient.Id" target="_blank" class="text-dark">
+                                                <img style="border-radius: 50%; width: 64px; height: 64px;"
+                                                     src="@item.Ingredient?.ImgPath"
+                                                     class="img-fluid" />
+                                                &emsp; @item.Ingredient?.Name
+                                            </a>
+                                        </th>
+                                        <td class="py-2 fs-6 align-middle text-dark">@item.Quantity @item.UnitOfMeasure</td>
+                                    </tr>
+                                }
+                            }
+                        </table>
+                    </div>
+                    <div class="tab-pane fade mb-2" id="ex1-pills-2" role="tabpanel"
+                         aria-labelledby="ex1-tab-2">
+                        @Html.Raw(Model?.Description)
+                    </div>
+                </div>
+                <!-- Pills content -->
+            </div>
+        </div>
+        <div class="col-lg-4 excludePrint">
+            <div class="px-0 border shadow-0">
+                <h3 class="card-title bg-light text-center py-4 label-font text-dark">You may like these recipes</h3>
+                @foreach (var item in (List<Recipe>)ViewData["footerRecipes"])
+                {
+                    <div class="card rounded-0">
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-5">
+                                    <a asp-route-id="@item.Id">
+                                        <img src="@item.ImgPath"
+                                             style="width: 150px; height: 150px;" class="img-responsive img-thumbnail" />
+                                    </a>
+                                </div>
+                                <div class="info col-7 label-font">
+                                    <a asp-route-id="@item.Id" class="text-color-change fw-bold fs-5">
+                                        @item.Name
+                                    </a>
+                                    <br>
+                                    <strong class="text-secondary fw-light">@item.FkRecipeCategory?.Name</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Feedback -->
+<div class="row d-flex align-items-center">
+    <div class="col-lg-12 excludePrint">
+        <div class="card">
+            <h6 class="card-header">Feedbacks</h6>
+            @{
+                var feedbacks = ViewData["feedbacks"] as IEnumerable<RecipeFeedback>;
+            }
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <div class="card-body d-flex flex-row align-items-center row">
+                    <div class="col-md-9">
+                        <input id="sendId" type="hidden" name="recipeId" value="@Model?.Id">
+                        <input id="sendText" type="text" class="form-control" placeholder="Enter your feedback..." name="feedbackText" maxlength="200">
+                        <button id="sendButton" onClick="sendFeedback()" class="btn btn-primary mt-2 float-end">Send</button>
+                    </div>
+                </div>
+            }
+            <div id="feedbackDiv">
+                <partial name="_Feedback" model="@feedbacks" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<partial name="_FavouriteModalPartial" />
+
+<script src="~/lib/jquery-3.7.0.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script type="text/javascript">
+    //This function when simulate a button press when press the enter key
+    document.getElementById("sendText").addEventListener("keyup", function (event) {
+        if (event.keyCode === 13) { //Enter's keycode is 13
+            event.preventDefault();
+            document.getElementById("sendButton").click();
+        }
+    });
+    function sendFeedback() {
+        var sendId = document.getElementById("sendId").value;
+        var sendText = document.getElementById("sendText").value;
+        document.getElementById("sendText").value = "";
+        $.ajax({
+            url: '/UserRecipes/GetFeedback',
+            type: 'POST',
+            data: { recipeId: sendId, feedbackText: sendText },
+            success: function (data) {
+                $('#feedbackDiv').html(data);
+            },
+            error: function () {
+                alert('Error feedback.');
+            }
+        });
+    };
+
+    function deleteFeedback(element) {
+        var feedbackId = element.dataset.feedbackId;
+        var recipeId = element.dataset.recipeId;
+        $.ajax({
+            url: '/UserRecipes/DeleteFeedback',
+            type: 'POST',
+            data: { recipeId: recipeId, id: feedbackId },
+            success: function (data) {
+                $('#feedbackDiv').html(data);
+            },
+            error: function () {
+                alert('Error removing feedback.');
+            }
+        });
+    };
+
+    function printDiv(divName) {
+        var originalContents = document.body.innerHTML;
+        var excludePrint = document.getElementsByClassName('excludePrint');
+        for (var i = 0; i < excludePrint.length; i++) {
+            excludePrint[i].style.display = 'none';
+        }
+        document.getElementById('printInfo').style.display = 'block';
+        var printContents = document.getElementById(divName).innerHTML;
+        document.body.innerHTML = printContents;
+        window.print();
+        document.getElementById('printInfo').style.display = 'none';
+        document.body.innerHTML = originalContents;
+    };
+
+    $(document).ready(function () {
+        UpdateIcon();
+        $('#share-email').click(function () {
+            var currentUrl = window.location.href;
+            var emailBody = 'I think you will find this recipe delightful ' + currentUrl;
+            window.open("mailto:?" + 'subject=Cookez - Share Recipe' + '&body=' + emailBody, '_self');
+        });
+        //This function will update the recipe id of modal
+        //also unchecked all checkboxes
+        $('.add-favourite-button').click(function () {
+            var recipeId = $(this).data('recipe-id');
+            var recipeName = $(this).data('recipe-name');
+            var recipeImg = $(this).data('recipe-imgpath');
+            document.getElementById("favourite-recipe-name").innerHTML = recipeName;
+            document.getElementById("favourite-recipe-image").src = recipeImg;
+            $("#favourite-save").attr("data-recipe-id", recipeId);
+            UpdateCheckbox(recipeId);
+        });
+        //This function will add the recipe into all selected favourite lists on clicking button with class add-favourite
+        //currently only add in favourite list
+        $('#favourite-save').click(function () {
+            var recipeId = $(this).data('recipe-id');
+            //Get all checked boxes' favourite ids
+            var favouriteIds = $('input.favourite-checkbox:checkbox:checked').map(function () {
+                return $(this).val();
+            }).get();
+            //Get all boxes' favourite ids
+            var allfavouriteIds = $('.favourite-checkbox').map(function () {
+                return $(this).val();
+            }).get();
+
+            $.ajax({
+                url: '/Favourites/AddRecipe',
+                type: 'POST',
+                data: { recipeId: recipeId, favouriteIds: favouriteIds, allfavouriteIds: allfavouriteIds },
+                success: UpdateIcon,
+                error: function () {
+                    alert('Error adding recipes to favorites.');
+                }
+            });
+        });
+    });
+    function UpdateCheckbox(recipeId) {
+        var favouriteIds = $('.favourite-checkbox').map(function () {
+            return $(this).val();
+        }).get();
+        $('.favourite-checkbox').prop('checked', false); // Unchecks all boxes
+
+        $.ajax({
+            url: '/Favourites/GetAllFavouriteLists',
+            type: 'POST',
+            data: { recipeId: recipeId, favouriteIds: favouriteIds },
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].isFavorite) {
+                        $('#favourite-checkbox-' + data[i].id).prop('checked', true); // Checks all boxes
+                    }
+                }
+            },
+            error: function () {
+                alert('Error getting favorite status.');
+            }
+        });
+    };
+    function UpdateIcon() {
+        var recipeId = @Html.Raw(Json.Serialize(@Model?.Id));
+
+        $.ajax({
+            url: '/Favourites/GetAllFavouriteRecipes',
+            type: 'POST',
+            data: { recipeIds: recipeId },
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].isFavorite) {
+                        $('#favourite-icon-' + data[i].recipeId).addClass('fa-heart');
+                        $('#favourite-icon-' + data[i].recipeId).removeClass('fa-heart-o');
+                    }
+                    else {
+                        $('#favourite-icon-' + data[i].recipeId).removeClass('fa-heart');
+                        $('#favourite-icon-' + data[i].recipeId).addClass('fa-heart-o');
+                    }
+                }
+            },
+            error: function () {
+                alert('Error getting favorite status.');
+            }
+        });
+    };
+
+
+</script>

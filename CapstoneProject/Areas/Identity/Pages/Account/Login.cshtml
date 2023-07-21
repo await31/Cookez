@@ -1,0 +1,115 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+}
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="~/css/pwdrevealstyle.css" />
+<link rel="stylesheet" href="~/css/burgeranimation.css" />
+<section>
+    <div class="container h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-xl-11">
+                <div class="card text-black border-0 color-change" style="border-radius: 25px;">
+                    <div class="card-body p-md-5">
+                        <div class="row justify-content-center">
+                            <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1 mb-4">
+                                <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4 text-color-change">Login</p>
+                                <div asp-validation-summary="ModelOnly" class="text-danger text-color-change-red"></div>
+                                <form class="mb-0 mx-md-4 text-color-change" id="account" method="post">
+                                    <div class="d-flex flex-row align-items-center mb-4">
+                                        <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                                        <div class="form-outline flex-fill mb-0">
+                                            <input asp-for="Input.Username" id="form3Example3c" class="form-control" placeholder="Your username" />
+                                            <label asp-for="Input.Username" class="form-label d-none" for="form3Example3c">Your Username</label>
+                                            <span asp-validation-for="Input.Username" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex flex-row align-items-center mb-4">
+                                        <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                                        <div class="form-outline flex-fill mb-0">
+                                            <div class="password-field">
+                                                <input asp-for="Input.Password" type="password" id="form3Example4c" class="form-control" placeholder="Your password">
+                                                <i class="fas fa-eye-slash text-color-change-black"></i>
+                                            </div>
+                                            <label asp-for="Input.Password" class="form-label d-none" for="form3Example4c">Password</label>
+                                            <span asp-validation-for="Input.Password" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between">
+                                        <div class="checkbox">
+                                            <label asp-for="Input.RememberMe" class="form-label">
+                                                <input class="form-check-input" asp-for="Input.RememberMe" />
+                                                <span class="text-color-change">@Html.DisplayNameFor(m => m.Input.RememberMe)</span>
+                                            </label>
+                                        </div>
+                                        <p>
+                                            <a class="text-decoration-none" id="forgot-password" asp-page="./ForgotPassword">Forgot password?</a>
+                                        </p>
+                                    </div>
+                                    <div class="d-flex justify-content-center">
+                                        <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-info text-light">Login</button>
+                                    </div>
+                                    <div class="mt-3">
+                                        <p class="text-color-change">
+                                            Don't have an account yet? <a class="text-decoration-none" asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register now</a>
+                                        </p>
+                                        
+                                    </div>
+                                </form>
+                                <form id="external-account account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal mx-1 mx-md-4">
+                                    <div class="d-flex flex-column">
+                                        @foreach (var provider in Model.ExternalLogins!) {
+                                            if (@provider.Name.Equals("Google")) {
+                                                <button type="submit" style="background-color: #f5f5f5" class="btn btn-light rounded-2 shadow w-100 fw-bold" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account"><img src="/images/ggicon.png" class="img-fluid me-2" style="width: 30px; height:30px;" /> Connect with Google </button>
+                                            }
+                                            if (@provider.Name.Equals("Facebook")) {
+                                                <button type="submit" style="background-color: #1877f2" class="btn text-light rounded-2 mt-3 shadow w-100 fw-bold" onclick="event.preventDefault(); customAlert()" title="Log in using your @provider.DisplayName account">
+                                                    <img src="/images/fbicon.png" class="img-fluid me-2" style="width: 30px; height:30px;" /> Connect with Facebook
+                                                </button>
+                                                @*
+                                                <button type="submit" style="background-color: #1877f2" class="btn text-light rounded-2 mt-3 shadow w-100 fw-bold" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account"><img src="/images/fbicon.png" class="img-fluid me-2" style="width: 30px; height:30px;" /> Connect with Facebook  </button>
+                                                *@
+                                            }
+                                        }
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
+                                <img src="/images/ratatouille.jpg"
+                                     class="img-fluid rounded-5" alt="Sample image">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-md-offset-2">
+                <section>
+                </section>
+            </div>
+        </div>
+        <img id="burger" src="/images/cute-burger.png" alt="Burger">
+    </div>
+</section>
+
+
+<script src="~/lib/jquery-3.7.0.min.js"></script>
+<script src="~/js/burgeranimation.js"></script>
+<script src="~/js/pwdrevealscript.js"></script>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+<script>
+    function customAlert() {
+        var alertBox = document.createElement("div");
+        alertBox.innerHTML = "<div style='position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 9999;'><div style='position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 300px; height: 150px; background-color: white; border-radius: 10px; text-align: center; padding-top: 10px;'><img src='https://adderra.com/wp-content/uploads/2020/09/under-construction.png' style='width: 80px; height:80px;'><br>This feature is currently under development</div></div>";
+        document.body.appendChild(alertBox);
+        setTimeout(function () {
+            alertBox.remove();
+        }, 3000);
+    }
+</script>

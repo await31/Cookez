@@ -1,0 +1,89 @@
+﻿@model IEnumerable<BusinessObjects.Models.Recipe>
+@inject SignInManager<BusinessObjects.Models.Account> SignInManager
+@using Microsoft.AspNetCore.Identity;
+@inject UserManager<BusinessObjects.Models.Account> UserManager
+@{
+    ViewData["Title"] = "My Recipes";
+}
+<style>
+    .card .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.35);
+        opacity: 0;
+        transition: opacity .3s ease-in-out;
+    }
+
+    .card a {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity .2s ease-in-out, visibility 0s linear .2s;
+    }
+
+    .card:hover a {
+        opacity: 1;
+        visibility: visible;
+        transition-delay: 0s;
+    }
+
+    .card:hover .overlay {
+        opacity: 1;
+    }
+
+    .limit-line-1 {
+        display: -webkit-box;
+        -webkit-line-clamp: 1; /* Maximum number of lines to show */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+<div class="mt-5 mb-5">
+    <h2 id="collectionName" class="text-center">My Recipes</h2>
+</div>
+<div class="row row-cols-1 row-cols-lg-3 g-2 g-lg-3">
+    @foreach (var recipe in Model)
+    {
+        <div class="col overflow-hidden border-0">
+            <div class="card mx-4 mb-4 px-0 rounded-4" style="position:relative;height:400px;">
+                <div class="position-relative" style="height: 60%;">
+                    <img src="@recipe.ImgPath" class="img-fluid card-img-top" alt="Food" style="height: 100%">
+                </div>
+                <div class="mt-2" style="height: 40%;">
+                    <div class="card-body pb-4 pt-3  text-color-change">
+                        <h4 class="card-title text-decoration-none text-center text-color-change" style="font-family: Bahnschrift; white-space:nowrap; overflow: hidden; text-overflow:ellipsis;">@recipe.Name</h4>
+                        <div class="d-flex row text-center mt-4">
+                            <div class="rounded-5 col-6 px-0">
+                                @if (recipe.PrepTime < 360)
+                                {
+                                    <i class="fa-solid fa-clock"></i> <span style="font-size: 14px;">@recipe.PrepTime minutes</span>
+                                }
+                                else
+                                {
+                                    <i class="fa-solid fa-clock"></i> <span style="font-size: 14px;">@(recipe.PrepTime / 60) hours</span>
+                                }
+                            </div>
+                            <div class="rounded-5 col-6 px-0">
+                                <i class="fa-solid fa-utensils"></i> <span style="font-size: 14px;">@recipe.FkRecipeCategory?.Name</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="overlay"></div>
+                <a asp-controller="UserRecipes" asp-action="Edit" asp-route-id="@recipe.Id" style="width:88px;height:34px;margin-top:-17px;margin-left:-44px;left: 50%; top: 40%;" class="btn btn-warning position-absolute">
+                    EDIT <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+                <a asp-controller="UserRecipes" asp-action="Details" asp-route-id="@recipe.Id" style="width:110px;height:34px;margin-top:-17px;margin-left:-55px;left: 50%; top: 60%;" target="_blank" class="btn btn-info position-absolute">
+                    DETAILS <i class="fa-solid fa-circle-info"></i>
+                </a>
+            </div>
+        </div>
+    } @*End of foreach*@
+
+</div>

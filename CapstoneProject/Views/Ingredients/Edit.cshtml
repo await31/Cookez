@@ -1,0 +1,41 @@
+﻿@model BusinessObjects.Models.Ingredient
+@{
+    ViewBag.Title = "Edit ingredient info";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<form method="post" asp-action="Edit">
+    <div asp-validation-summary="ModelOnly" class="text-danger text-color-change-red"></div>
+    <input asp-for="Id" hidden />
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2 class="text-primary">Edit Ingredient</h2>
+            <hr />
+        </div>
+        <div class="mb-3">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Description"></label>
+            <input asp-for="Description" class="form-control" />
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <div class="mb-3 d-none">
+            <label asp-for="ImgPath" class="control-label"></label>
+            <input asp-for="ImgPath" class="form-control" />
+            <span asp-validation-for="ImgPath" class="text-danger"></span>
+        </div>
+        <div class="mb-3 d-none">
+            <label asp-for="Status" class="control-label"></label>
+            <input asp-for="Status" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="FkCategoryId" class="control-label">Category Name</label>
+            <select asp-for="FkCategoryId" class="form-control" asp-items="ViewBag.FkCategoryId"></select>
+            <span asp-validation-for="FkCategoryId" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 10%;">Update</button>
+        <a asp-controller="Ingredients" asp-action="Index" class="btn btn-warning" style="width: 10%;">Back to list</a>
+    </div>
+</form>

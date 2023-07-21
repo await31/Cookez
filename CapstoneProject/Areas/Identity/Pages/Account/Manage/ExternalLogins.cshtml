@@ -1,0 +1,70 @@
+﻿@page
+@model ExternalLoginsModel
+@{
+    ViewData["Title"] = "Manage your external logins";
+    ViewData["ActivePage"] = ManageNavPages.ExternalLogins;
+
+}
+
+<partial name="_StatusMessage" model="Model.StatusMessage" />
+@if (Model.CurrentLogins?.Count > 0)
+{
+    <h4>Registered Logins</h4>
+    <table class="table">
+        <tbody>
+            @foreach (var login in Model.CurrentLogins)
+            {
+                <tr>
+                    <td>
+                        @if (login.ProviderDisplayName.Equals("Google"))
+                        {
+                            <div style="background-color: #f5f5f5" class="btn btn-light rounded-2 shadow w-50 fw-bold" name="provider" value="login.ProviderDisplayName"><img src="/images/ggicon.png" class="img-fluid me-2" style="width: 30px; height:30px;" /> Google </div>
+                        }
+                        @if (login.ProviderDisplayName.Equals("Facebook"))
+                        {
+                            <div style="background-color: #1877f2" class="btn text-light rounded-2 shadow w-50 fw-bold" name="provider" value="login.ProviderDisplayName"><img src="/images/fbicon.png" class="img-fluid me-2" style="width: 30px; height:30px;" /> Facebook  </div>
+                        }
+                    </td>
+                    <td>
+                        @if (Model.ShowRemoveButton)
+                        {
+                            <form id="@($"remove-login-{login.LoginProvider}")" asp-page-handler="RemoveLogin" method="post">
+                                <div>
+                                    <input asp-for="@login.LoginProvider" name="LoginProvider" type="hidden" />
+                                    <input asp-for="@login.ProviderKey" name="ProviderKey" type="hidden" />
+                                    <button type="submit" class="btn btn-danger flex-end rounded-2" title="Remove this @login.LoginProvider login from your account">Remove</button>
+                                </div>
+                            </form>
+                        }
+                        else
+                        {
+                            @: &nbsp;
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@if (Model.OtherLogins?.Count > 0)
+{
+    <h4>Add another service to log in.</h4>
+    <hr />
+    <form id="link-login-form" asp-page-handler="LinkLogin" method="post" class="form-horizontal">
+        <div id="socialLoginList">
+            <p>
+                @foreach (var provider in Model.OtherLogins)
+                {
+                    if (@provider.Name.Equals("Google"))
+                    {
+                        <button type="submit" style="background-color: #f5f5f5" class="btn btn-light rounded-2 shadow w-50 fw-bold" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account"><img src="/images/ggicon.png" class="img-fluid me-2" style="width: 30px; height:30px;" /> Connect with Google </button>
+                    }
+                    if (@provider.Name.Equals("Facebook"))
+                    {
+                        <button type="submit" style="background-color: #1877f2" class="btn text-light rounded-2 mt-3 shadow w-50 fw-bold" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account"><img src="/images/fbicon.png" class="img-fluid me-2" style="width: 30px; height:30px;" /> Connect with Facebook  </button>
+                    }
+                }
+            </p>
+        </div>
+    </form>
+}

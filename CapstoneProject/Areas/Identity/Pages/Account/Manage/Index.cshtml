@@ -1,0 +1,48 @@
+﻿@page
+@using BusinessObjects.Models;
+@model IndexModel
+@inject SignInManager<Account> SignInManager
+@inject UserManager<Account> UserManager
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["ActivePage"] = ManageNavPages.Index;
+    var currentUser = await UserManager.GetUserAsync(User);
+}
+<h4>@ViewData["Title"]</h4>
+<partial name="_StatusMessage" model="Model.StatusMessage" />
+<div class="row">
+    <div class="col-md-6">
+        <form id="profile-form" method="post" enctype="multipart/form-data">
+             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+             <label asp-for="Username"></label>
+             <div class="form-group input-group mb-3 d-flex">
+                 <span class="input-group-text" id="basic-addon1"><i class="fa fa-user-lock"></i></span>
+                 <input asp-for="Username" class="form-control form-control-lg" disabled />
+             </div>
+
+             <label asp-for="Input.PhoneNumber"></label>
+             <div>
+                 <div class="form-group input-group mb-3 d-flex">
+                     <span class="input-group-text" id="basic-addon1"><i class="fa fa-phone"></i></span>
+                     <input asp-for="Input.PhoneNumber" class="form-control form-control-lg" placeholder="Phone Number" aria-label="PhoneNumber" aria-describedby="basic-addon1" />
+                 </div>
+                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+             </div>
+
+             <label asp-for="Input.File">Change profile picture</label>
+             <div>
+                 <div class="form-group input-group mb-3 d-flex">
+                     <span class="input-group-text" id="basic-addon1"><i class="fa fa-image"></i></span>
+                     <input type="file" accept="image/png, image/jpeg" asp-for="Input.File" class="form-control form-control-lg" aria-label="Profilepicture" aria-describedby="basic-addon1" />
+                  </div>
+                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+             </div>
+
+             <button id="update-profile-button" type="submit" class="btn btn-dark btn-lg flex-end rounded-2 ">Save</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

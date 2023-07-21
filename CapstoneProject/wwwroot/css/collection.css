@@ -1,0 +1,48 @@
+﻿.collection-card {
+    height: 450px;
+    width: 18rem;
+    height:450px;
+    padding: 0;
+    display: flex;
+    border-style: solid;
+    border-width: 2px;
+}
+
+    .collection-card .card-head {
+        background-color: #ccc;
+        height: 45%;
+        width: 100%;
+    }
+
+.recipe-card {
+    width: 340px;
+    height: 420px;
+}
+
+    .recipe-card .card-head {
+        height: 50%;
+        position: relative;
+    }
+
+    .recipe-card .card-body {
+        height: 40%;
+    }
+
+@media (max-width: 767px) {
+    .recipe-card, .collection-card{
+        width: 100%;
+        height: 280px;
+        display: flex;
+        flex-direction: row;
+    }
+
+        .recipe-card .card-head, .collection-card .card-head {
+            height: 100%;
+            width: 50%;
+        }
+
+        .recipe-card .card-body, .collection-card .card-body {
+            height: 100%;
+            width: 50%;
+        }
+}

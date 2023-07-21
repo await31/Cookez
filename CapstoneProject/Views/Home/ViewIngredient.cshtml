@@ -1,0 +1,66 @@
+﻿@model IEnumerable<BusinessObjects.Models.Ingredient>
+
+@{
+    ViewBag.Title = "View Ingredient";
+    BusinessObjects.Models.Pager pager = new BusinessObjects.Models.Pager();
+    int pageNo = 0;
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .card-text {
+        display: -webkit-box;
+        -webkit-line-clamp: 3; /* Maximum number of lines to show */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .card-title {
+        display: -webkit-box;
+        -webkit-line-clamp: 1; /* Maximum number of lines to show */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .card img {
+        transition: 0.5s ease;
+    }
+
+        .card img:hover {
+            -webkit-transform: scale(1.1);
+            -ms-transform: scale(1.1);
+            transform: scale(1.1);
+            transition: 0.5s ease;
+        }
+
+    div.card {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+</style>
+
+<div class="container">
+    <div class="row row-cols-1 row-cols-lg-5 g-5 g-lg-3">
+        @foreach (var obj in Model)
+        {
+            <div class="col">
+                <div class="card px-0 mx-3 my-4 round-5 overflow-hidden" style="height: 400px;">
+                    <img src="@obj.ImgPath" class="card-img-top img-fluid h-50" alt="Ingredient image">
+                    <div class="card-body h-50 mb-1">
+                        <h5 class="card-title text-color-change">@obj.Name</h5>
+                        <p class="card-text text-color-change">@obj.Description</p>
+                        <a asp-controller="Home" asp-action="IngredientDetails" asp-route-ingredientId="@obj.Id" asp-route-id="@obj.FkCategoryId" asp-route-pg="pg" class="btn btn-dark text-light float-end"><i class="fa-solid fa-file-lines"></i></a>
+                    </div>
+                </div>
+            </div>
+        }
+        <hr>
+    </div>
+    <partial name="_Pager" model="@pager" />
+</div>

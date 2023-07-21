@@ -1,0 +1,230 @@
+﻿@model BusinessObjects.Models.MealPlan
+@{
+    ViewBag.Title = "Planing Details";
+}
+
+<hr />
+<div class="row">
+    <form method="post" asp-action="DeletePOST" asp-route-id="@Model.Id">
+        <button class="btn btn-danger float-end" type="submit">Delete this Plan <i class="fa fa-trash-can"></i></button>
+    </form>
+    <h1 class="text-center label-font">Planning Details</h1>
+</div>
+
+<style>
+    /* Define the styles for the scrollbar */
+    .overflow-auto::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    .overflow-auto::-webkit-scrollbar-track {
+        background-color: #f1f1f1;
+    }
+
+    .overflow-auto::-webkit-scrollbar-thumb {
+        background-color: #888;
+        border-radius: 5px;
+    }
+
+        .overflow-auto::-webkit-scrollbar-thumb:hover {
+            background-color: #555;
+        }
+
+        .card-title {
+        display: -webkit-box;
+        -webkit-line-clamp: 1; /* Maximum number of lines to show */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+
+<section class="py-4">
+    <div class="row gx-4">
+        <div class="col-lg-8 mb-4">
+            <div class="border rounded-2 px-3 py-2 bg-white">
+                <!-- Pills navs -->
+                <ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
+                    <li class="nav-item d-flex" role="presentation">
+                        <a class="label-font nav-link d-flex align-items-center justify-content-center w-100 active"
+                           id="ex1-tab-1" data-mdb-toggle="pill" href="#ex1-pills-1" role="tab"
+                           aria-controls="ex1-pills-1" aria-selected="true">General Information</a>
+                    </li>
+                    <li class="nav-item d-flex" role="presentation">
+                        <a class="label-font nav-link d-flex align-items-center justify-content-center w-100"
+                           id="ex1-tab-2" data-mdb-toggle="pill" href="#ex1-pills-2" role="tab"
+                           aria-controls="ex1-pills-2" aria-selected="false">Nutrition Facts</a>
+                    </li>
+                </ul>
+                <!-- Pills navs -->
+                <!-- Pills content -->
+                <div class="tab-content" id="ex1-content">
+                    <div class="tab-pane fade show active" id="ex1-pills-1" role="tabpanel"
+                         aria-labelledby="ex1-tab-1">
+                        <ul class="list-group">
+                            <li class="list-group-item label-font">
+                                Title: @Model.Title
+                            </li>
+                            <li class="list-group-item label-font">
+                                Description: @Model.Description
+                            </li>
+                            <li class="list-group-item label-font">
+                                Date: @Model.Date?.ToLongDateString()
+                            </li>
+                            <li class="list-group-item label-font">
+                                Number of recipes: &nbsp; @Model.Recipes.Count()
+                            </li>
+                            <li class="list-group-item label-font">
+                                Customize color: @(new System.Globalization.CultureInfo("en-US").TextInfo.ToTitleCase(Model.Color))
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab-pane fade mb-2" id="ex1-pills-2" role="tabpanel"
+                         aria-labelledby="ex1-tab-2">
+                        @if (((Nutrition)ViewData["TotalNutrition"]) != null) {
+                            <ul class="list-group">
+                                <li class="list-group-item label-font">
+                                    Calories: @(((Nutrition)ViewData["TotalNutrition"]).Calories) (kcal)
+                                </li>
+                                <li class="list-group-item label-font">
+                                    Fat: @(((Nutrition)ViewData["TotalNutrition"]).Fat) (g)
+                                </li>
+                                <li class="list-group-item label-font">
+                                    Protein: @(((Nutrition)ViewData["TotalNutrition"]).Protein) (g)
+                                </li>
+                                <li class="list-group-item label-font">
+                                    Fibre: @(((Nutrition)ViewData["TotalNutrition"]).Fibre) (g)
+                                </li>
+                                <li class="list-group-item label-font">
+                                    Carbohydrate: @(((Nutrition)ViewData["TotalNutrition"]).Carbohydrate) (g)
+                                </li>
+                                <li class="list-group-item label-font">
+                                    Cholesterol: @(((Nutrition)ViewData["TotalNutrition"]).Cholesterol) (g)
+                                </li>
+                            </ul>
+                        }
+                    </div>
+                </div>
+                <!-- Pills content -->
+            </div>
+        </div>
+        <div class="col-lg-4 excludePrint">
+            <div class="px-0 border shadow-0">
+                <h3 class="card-title text-center py-4 label-font text-color-change">Grocery list <i class="fa-solid fa-cart-shopping"></i></h3>
+                <div class="accordion accordion-flush" id="accordionFlushExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header bg-light">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#all" aria-expanded="false" aria-controls="all">
+                                Ingredients for this Planning
+                            </button>
+                        </h2>
+                        <div id="all" class="accordion-collapse collapse show" data-bs-parent="#accordionFlushExample">
+                            <div class="accordion-body">
+                                <ul class="list-group overflow-auto" style="height: 400px;">
+                                    @foreach (var item in (List<RecipeIngredient>)ViewData["GroupedIngredients"]) {
+                                        <li class="list-group-item label-font">
+                                            <i class="fa-regular fa-bookmark text-success"></i> &nbsp; @item.Quantity @item.UnitOfMeasure @item.Ingredient.Name
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    @foreach (var item in Model.Recipes) {
+                        <div class="accordion-item">
+                            <h2 class="accordion-header bg-light">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#@item.Id" aria-expanded="false" aria-controls="@item.Id">
+                                    Ingredients for @item.Name
+                                </button>
+                            </h2>
+                            <div id="@item.Id" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                <div class="accordion-body">
+                                    <ul class="list-group overflow-auto" style="height: 200px;">
+                                        @foreach (var ingredient in item.RecipeIngredients) {
+                                                    <li class="list-group-item text-center label-font">
+                                                @ingredient.Quantity @ingredient.UnitOfMeasure @ingredient.Ingredient.Name
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+<h2 class="label-font text-center text-success">List of recipes</h2>
+<hr />
+<hr />
+
+<div class="row row-cols-1 row-cols-md-4 g-4">
+    @foreach (var item in Model.Recipes) {
+        <a class="text-decoration-none" asp-controller="UserRecipes" asp-action="Details" asp-route-id="@item.Id" target="_blank">
+            <div class="col">
+                <div class="card">
+                    <img src="@item.ImgPath" class="card-img-top" style="height: 200px;">
+                    <div class="card-body">
+                        <h5 class="card-title text-center card-limit-1 mb-3 label-font text-color-change">@item.Name</h5>
+                        <p class="card-text text-color-change">Preparation time: @item.PrepTime mins</p>
+                        <p class="card-text text-color-change">Serving size: @item.ServingSize people</p>
+                        @switch (item.Difficult) {
+                            case 1:
+                                <p class="card-text text-color-change">Difficult: Easy</p>
+                                break;
+                            case 2:
+                                <p class="card-text text-color-change">Difficult: Medium</p>
+                                break;
+                            case 3:
+                                <p class="card-text text-color-change">Difficult: Hard</p>
+                                break;
+                            default:
+                                <p class="card-text text-color-change">Difficult: No Information</p>
+                                break;
+                        }
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-color-change float-end">@item?.CreatedDate?.ToShortDateString()</small>
+                    </div>
+                </div>
+            </div>
+        </a>
+    }
+</div>
+<script src="~/lib/jquery-3.7.0.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Restore the toggled state on page load
+        $('li.list-group-item i').each(function () {
+            var bookmark = $(this);
+            var isToggled = localStorage.getItem('bookmark_' + bookmark.parent().index());
+
+            if (isToggled === 'true') {
+                bookmark.removeClass('fa-regular').addClass('fa-solid');
+            }
+        });
+
+        // Add a click event listener to the <i> tag
+        $('li.list-group-item i').on('click', function () {
+            var bookmark = $(this);
+            var index = bookmark.parent().index();
+
+            // Toggle the classes
+            bookmark.toggleClass('fa-regular fa-solid');
+
+            // Update the toggled state in localStorage only if clicked
+            if (bookmark.hasClass('fa-regular')) {
+                localStorage.removeItem('bookmark_' + index);
+            } else {
+                localStorage.setItem('bookmark_' + index, 'true');
+            }
+        });
+    });
+</script>

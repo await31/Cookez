@@ -1,0 +1,69 @@
+﻿@model IEnumerable<BusinessObjects.Models.Ingredient>
+@{
+    ViewBag.Title = "Ingredient";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    .card-text {
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* Maximum number of lines to show */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="px-0">
+        <br />
+        <div class="col-5">
+            <a asp-controller="Ingredients" asp-action="Create" class="btn btn-success fw-bold text-light mt-2"><i class="fa-solid fa-folder-plus"></i> New Ingredient</a>
+        </div>
+        <br />
+        <table class="table table-striped table-bordered w-100">
+            <thead class="table-dark">
+                <tr>
+                    <th style="width: 11%;">
+                        Name
+                    </th>
+                    <th>
+                        Image
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th style="width: 8%;">
+                        Category
+                    </th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model) {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td class="p-0">
+                            <img src="@Html.DisplayFor(modelItem => item.ImgPath)" style="width: 100px; height: 100px;">
+                        </td>
+                        <td>
+                            <p class="card-text text-color-change">@Html.DisplayFor(modelItem => item.Description)</p>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FkCategory.Name)
+                        </td>
+                        <td style="width: 1%;">
+                            <a class="btn btn-warning text-light" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        </td>
+                        <td style="width: 1%;">
+                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

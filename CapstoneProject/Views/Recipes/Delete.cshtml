@@ -1,0 +1,81 @@
+﻿@model BusinessObjects.Models.Recipe
+
+@{
+    ViewBag.Title = "Create recipe";
+    //Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Recipe</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ImgPath)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ImgPath)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @Html.Raw(Model.Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Nutrition)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Nutrition)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PrepTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PrepTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Difficult)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Difficult)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.FkUserId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FkUserId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CreatedDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.FkRecipe)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FkRecipe.Id)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.FkRecipeCategory)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FkRecipeCategory.Name)
+        </dd>
+    </dl>
+</div>
+<form asp-action="Delete">
+    <input type="hidden" asp-for="Id" />
+    <input type="submit" value="Delete" class="btn btn-danger" /> 
+    <a asp-action="Index" class="btn btn-warning ms-2">Back to List</a>
+</form>

@@ -1,0 +1,54 @@
+﻿@model Favourite
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2 class="text-center label-font">New collection</h2>
+
+<hr />
+<div style="min-height: 100vh; display: flex; flex-direction: column;">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <form id="create-form" asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div asp-validation-summary="ModelOnly" class="text-danger text-color-change-red"></div>
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label label-font mb-2 mt-2"></label>
+                    <input asp-for="Name" class="form-control" placeholder="e.g. Recipes for Lunar new year" required/>
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label label-font mb-2 mt-2"></label>
+                    <input asp-for="Description" class="form-control" placeholder="e.g. My family enjoy these recipes"/>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="isPrivate" class="control-label label-font mb-2 mt-2">Sharing Settings</label>
+                    <select asp-for="isPrivate" class="form-control" required>
+                        <option value="true">Private</option>
+                        <option value="false">Public</option>
+                    </select>
+                    <span asp-validation-for="isPrivate" class="text-danger"></span>
+                </div>
+                <div class="form-group mt-3 text-center">
+                    <div id="create-button-container" class="position-relative d-inline-block">
+                        <input type="submit" value="Create" class="btn btn-success" id="create-button" />
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+
+    <div class=" text-center">
+        <a asp-action="Index" class="btn btn-warning mt-3">Back to List</a>
+    </div>
+    <div style="flex-grow:1"></div>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

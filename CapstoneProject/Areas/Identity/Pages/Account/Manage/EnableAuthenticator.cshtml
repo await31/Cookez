@@ -1,0 +1,66 @@
+﻿@page
+@model EnableAuthenticatorModel
+@{
+    ViewData["Title"] = "Configure authenticator app";
+    ViewData["ActivePage"] = ManageNavPages.TwoFactorAuthentication;
+}
+
+<partial name="_StatusMessage" for="StatusMessage" />
+<h4>@ViewData["Title"]</h4>
+<div>
+    <p>To use an authenticator app go through the following steps:</p>
+    <ol class="list">
+        
+        <li>
+            <div class="row">
+                    <p>Use your Authenticator APP to scan this QR code.</p>
+
+                <div class="col-md-3 img-fluid">
+
+                    <div id="qrCode" style="width: 200px; height: 200px;"></div>
+                    <div id="qrCodeData" data-url="@Html.Raw(Model.AuthenticatorUri)"></div>
+                </div>
+                <div class="col-md-9">
+                    <kbd>@Model.SharedKey</kbd>
+                    <p>If you have any problem with scanning the QR code, enter this code manually into the APP.</p>
+                    <form method="post">
+                        <div class="form-group">
+                            <label asp-for="Input.Code" class="control-label">Verification Code</label>
+                            <input asp-for="Input.Code" class="form-control" autocomplete="off" />
+                            <span asp-validation-for="Input.Code" class="text-danger"></span>
+                        </div>
+                        <button type="submit" class="btn btn-dark btn-lg flex-end rounded-2">Verify</button>
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    </form>
+                </div>
+            </div>     
+        </li>
+
+        <li>
+            <p>
+                Download a two-factor authenticator app:
+                <ul>
+                    <li>
+                        <strong>Microsoft Authenticator <i class="fa fa-windows" aria-hidden="true"></i> </strong> <br />
+                        <a href="https://go.microsoft.com/fwlink/?Linkid=825072" style="display: inline-block; overflow: hidden; border-radius: 13px; width: 250px; height: 83px;"><img src="/images/google-badge.png" style="border-radius: 13px; width: 250px; height: 83px;" /></a>
+                        <a href="https://apps.apple.com/us/app/microsoft-authenticator/id983156458?itsct=apps_box_badge&amp;itscg=30200" style="display: inline-block; overflow: hidden; border-radius: 13px; width: 250px; height: 83px;"><img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1432944000" alt="Download on the App Store" style="border-radius: 13px; width: 250px; height: 83px;"></a>
+                    </li>
+                    <hr />
+                    <li>
+                        <strong>Google Authenticator <i class="fa fa-google" aria-hidden="true"></i> </strong> <br />
+                        <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&amp;hl=en" style="display: inline-block; overflow: hidden; border-radius: 13px; width: 250px; height: 83px;"><img src="/images/google-badge.png" style="border-radius: 13px; width: 250px; height: 83px;" /></a>
+                        <a href="https://apps.apple.com/us/app/google-authenticator/id388497605?itsct=apps_box_badge&amp;itscg=30200" style="display: inline-block; overflow: hidden; border-radius: 13px; width: 250px; height: 83px;"><img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1284940800" alt="Download on the App Store" style="border-radius: 13px; width: 250px; height: 83px;"></a>
+                    </li>
+                </ul>
+
+            </p>
+
+        </li>
+    </ol>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript" src="~/lib/qrcode.js"></script>
+    <script type="text/javascript" src="~/js/qr.js"></script>
+}

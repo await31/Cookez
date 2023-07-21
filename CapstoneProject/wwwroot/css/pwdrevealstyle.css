@@ -1,0 +1,15 @@
+﻿/*::-ms-reveal {
+    display: none;
+}*/
+.password-field {
+    position: relative;
+}
+
+.password-field i {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+

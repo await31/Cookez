@@ -1,0 +1,263 @@
+﻿@page
+@model RegisterConfirmationModel
+@{
+    ViewData["Title"] = "Register confirmation";
+}
+<style>
+
+    .container-confirm {
+        justify-content: space-around;
+        width: 100%;
+        height: 100vh;
+        background-color: aliceblue;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+    }
+
+        .container-confirm:before {
+            color: black;
+            content: "We just need to verify your email before you can continue using Cookez. Verifying your email helps secure your account.";
+            display: inline-block;
+            height: 10%;
+            vertical-align: middle;
+            margin-right: -0.25em;
+            /* Adjusts for spacing */
+        }
+
+    .note {
+        display: block;
+    }
+
+    .circle {
+        align-self: center;
+        display: inline-block;
+        vertical-align: middle;
+        *vertical-align: auto;
+        *zoom: 1;
+        *display: inline;
+        -moz-border-radius: 300px;
+        -webkit-border-radius: 300px;
+        border-radius: 300px;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        overflow: hidden;
+        height: 300px;
+        width: 300px;
+        background-color: #fff;
+        position: relative;
+    }
+
+        .circle:before {
+            content: "";
+            display: inline-block;
+            height: 100%;
+            vertical-align: middle;
+            margin-right: -0.25em;
+            /* Adjusts for spacing */
+            background-color: black;
+        }
+
+    .mail-box {
+        display: inline-block;
+        vertical-align: middle;
+        *vertical-align: auto;
+        *zoom: 1;
+        *display: inline;
+        -moz-border-radius: 25px 25px 0 0;
+        -webkit-border-radius: 25px;
+        border-radius: 25px 25px 0 0;
+        width: 150px;
+        height: 75px;
+        background-color: #3498db;
+        margin: 0 auto;
+        position: relative;
+    }
+
+        .mail-box:before, .mail-box:after {
+            content: "";
+            display: block;
+            position: absolute;
+        }
+
+        .mail-box:before {
+            -moz-border-radius: 25px 25px 0 0;
+            -webkit-border-radius: 25px;
+            border-radius: 25px 25px 0 0;
+            background-color: #9fc9f0;
+            width: 50px;
+            left: 0;
+            height: 100%;
+        }
+
+        .mail-box:after {
+            width: 8px;
+            height: 200%;
+            left: 50%;
+            bottom: -200%;
+            margin-left: -4px;
+            background-color: #12467e;
+        }
+
+    .flag {
+        -moz-transform-origin: 50% 100%;
+        -ms-transform-origin: 50% 100%;
+        -webkit-transform-origin: 50% 100%;
+        transform-origin: 50% 100%;
+        width: 8px;
+        height: 100%;
+        margin: -25% auto 0 auto;
+        background-color: #e74c3c;
+        position: relative;
+    }
+
+        .flag:before, .flag:after {
+            content: "";
+            display: block;
+            position: absolute;
+        }
+
+        .flag:before {
+            background-color: inherit;
+            width: 32px;
+            left: 0;
+            top: 0;
+            height: 16px;
+        }
+
+        .flag:after {
+            -moz-border-radius: 24px;
+            -webkit-border-radius: 24px;
+            border-radius: 24px;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            background-color: #9fc9f0;
+            border: 8px solid #e74c3c;
+            width: 24px;
+            height: 24px;
+            left: 50%;
+            margin-left: -12px;
+            bottom: -12px;
+        }
+
+    @@-webkit-keyframes mailBoxUp {
+        from {
+            filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+            opacity: 0;
+            -moz-transform: translate3d(0, 90px, 0);
+            -ms-transform: translate3d(0, 90px, 0);
+            -webkit-transform: translate3d(0, 90px, 0);
+            transform: translate3d(0, 90px, 0);
+        }
+
+        to {
+            filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
+            opacity: 1;
+            -moz-transform: translate3d(0, 0, 0);
+            -ms-transform: translate3d(0, 0, 0);
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+    @@keyframes mailBoxUp {
+        from {
+            filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+            opacity: 0;
+            -moz-transform: translate3d(0, 90px, 0);
+            -ms-transform: translate3d(0, 90px, 0);
+            -webkit-transform: translate3d(0, 90px, 0);
+            transform: translate3d(0, 90px, 0);
+        }
+
+        to {
+            filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
+            opacity: 1;
+            -moz-transform: translate3d(0, 0, 0);
+            -ms-transform: translate3d(0, 0, 0);
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+    @@-webkit-keyframes flagSpin {
+        from {
+            filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+            opacity: 0;
+            -moz-transform: rotate(-90deg);
+            -ms-transform: rotate(-90deg);
+            -webkit-transform: rotate(-90deg);
+            transform: rotate(-90deg);
+        }
+
+        to {
+            filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
+            opacity: 1;
+            -moz-transform: rotate(0);
+            -ms-transform: rotate(0);
+            -webkit-transform: rotate(0);
+            transform: rotate(0);
+        }
+    }
+
+    @@keyframes flagSpin {
+        from {
+            filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+            opacity: 0;
+            -moz-transform: rotate(-90deg);
+            -ms-transform: rotate(-90deg);
+            -webkit-transform: rotate(-90deg);
+            transform: rotate(-90deg);
+        }
+
+        to {
+            filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
+            opacity: 1;
+            -moz-transform: rotate(0);
+            -ms-transform: rotate(0);
+            -webkit-transform: rotate(0);
+            transform: rotate(0);
+        }
+    }
+
+    .mail-box {
+        animation: mailBoxUp 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+        -webkit-animation: mailBoxUp 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+    }
+
+    .flag {
+        -moz-backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        animation: flagSpin 500ms 250ms backwards cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        -webkit-animation: flagSpin 500ms 250ms backwards cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+</style>
+<h1>@ViewData["Title"]</h1>
+@{
+    if (@Model.DisplayConfirmAccountLink)
+    {
+        <p>
+            Are you sure? This page is has been hacked by the infamous hacker 4chan.
+            Normally this would be emailed: <a id="confirm-link" href="@Model.EmailConfirmationUrl">Click here to confirm your account</a>
+        </p>
+    }
+    else
+    {
+        <div class="container-confirm">
+            <div class="circle">
+                <div class="mail-box">
+                    <div class="flag"></div>
+                </div>
+            </div>
+            <div class="note note-primary mb-3 mt-3 text-dark align-self-center">
+                <strong>Reminder:</strong>Don't forget check your spam!
+            </div>
+        </div>
+    }
+}
+
+

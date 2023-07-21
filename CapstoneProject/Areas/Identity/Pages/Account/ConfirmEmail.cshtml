@@ -1,0 +1,16 @@
+﻿@page
+@model ConfirmEmailModel
+@{
+    ViewData["Title"] = "Confirm email";
+}
+
+<h1>@ViewData["Title"]</h1>
+<div style="min-height: 100vh; display: flex; flex-direction: column;">
+    <partial name="_StatusMessage" model="Model.StatusMessage" />
+    <div class="row ms-5">
+        <div class="col-md-12 text-center">
+            <img src="~/images/thankyounotepic.png" style="height: 100%;">
+        </div>
+    </div>
+    <div style="flex-grow:1"></div>
+</div>

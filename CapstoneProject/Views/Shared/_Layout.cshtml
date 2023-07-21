@@ -1,0 +1,215 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv='Content-Type' content='Type=text/html; charset=utf-8'>
+    <meta property="og:url" content="https://cookez.azurewebsites.net/" />
+    <meta property="og:title" content="Place of foods and recipes" />
+    <meta property="og:site_name" content="Cookez" />
+    <meta property="og:description" content="A place to store and create delicious, nutritious recipes for everyone's!" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://www.howtocook.recipes/wp-content/uploads/2021/05/Ratatouille-recipe-500x500.jpg" />
+    <meta property="og:locale" content="vi" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap-5.3.0/css/bootstrap.min.css" />
+    
+    <link rel="stylesheet" href="~/css/recipedetail.css" />
+    <link rel="stylesheet" href="~/css/togglestyle.css" />
+    <link rel="icon" type="image/x-icon" href="\images\logo.png">
+    <script src="https://kit.fontawesome.com/08194921a9.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.css" />
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <!-- MDB -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css" rel="stylesheet" />
+    <!-- MDB -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    @RenderSection("scripts", required: false)
+</head>
+<style>
+
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: grey;
+        border-radius: 100rem;
+    }
+
+    hr {
+        clear: both;
+        visibility: hidden;
+    }
+
+    li {
+        list-style: none;
+    }
+
+    input::placeholder {
+        color: gray !important;
+        opacity: 0.5 !important;
+    }
+
+    .form-outline .form-control {
+        background-color: white;
+    }
+
+    .breadcrumb a {
+        text-decoration: none;
+        font-weight: bold;
+        color: cadetblue;
+    }
+
+    .breadcrumb {
+        margin-bottom: 0;
+    }
+
+    .unstyled-button {
+        padding: 0;
+        border: none;
+        background: none;
+    }
+
+    .card-text-custom {
+        max-height: 220px;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+@*<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+    var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+    (function () {
+        var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+        s1.async = true;
+        s1.src = 'https://embed.tawk.to/649ba01294cf5d49dc603bff/1h3vuiik1';
+        s1.charset = 'UTF-8';
+        s1.setAttribute('crossorigin', '*');
+        s0.parentNode.insertBefore(s1, s0);
+    })();
+</script>
+<!--End of Tawk.to Script-->*@
+<script>
+    window.chatbaseConfig = {
+        chatbotId: "mQrtSXYqLsinfPowHB8N4",
+    }
+</script>
+<script src="https://www.chatbase.co/embed.min.js"
+        id="mQrtSXYqLsinfPowHB8N4"
+        defer>
+</script>
+<body class="dark">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <!-- Container wrapper -->
+        <div class="container-fluid">
+            <!-- Navbar brand -->
+            <a class="navbar-brand mt-2 mt-lg-0" asp-area="" asp-controller="Home" asp-action="Index">
+                <img src="\images\logo.png"
+                     height="80"
+                     alt="Cookez Logo"
+                     loading="lazy" />
+            </a>
+
+            <!-- Toggle button -->
+            <button class="navbar-toggler"
+                    type="button"
+                    data-mdb-toggle="collapse"
+                    data-mdb-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <!-- Collapsible wrapper -->
+            <div class="collapse navbar-collapse container-fluid justify-content-between text-center" id="navbarSupportedContent">
+                <!-- Search -->
+                <form class="d-flex form-outline pb-2" asp-controller="UserRecipes" asp-action="Filter">
+                    <input type="search"
+                           class="form-control rounded border"
+                           id="SearchString"
+                           name="SearchString"
+                           placeholder="What do you want to eat today?"
+                           aria-label="Search"
+                           aria-describedby="search-addon" value="@ViewData["FilterSearch"]" />
+                    <button class="btn btn-dark ms-2 rounded" type="submit" value="Find"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </form>
+
+                <div class="d-flex justify-content-between">
+                    <div class="load-flash"></div>
+                    <div class="mode-toggle noselect">
+                        <h6 class="label-dark m-0">Dark</h6>
+                        <div class="toggle-switch"></div>
+                        <h6 class="label-light m-0">Light</h6>
+                    </div>
+
+                    <div class="d-flex">
+                        <partial name="_LoginPartial" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Container wrapper -->
+    </nav>
+    <div class="container min-vh-100">
+        <main role="main" class="h-100">
+            <partial name="_Notification" />
+            <breadcrumb class="mt-5"></breadcrumb>
+            @RenderBody()
+        </main>
+    </div>
+    <!-- Footer -->
+    <div class="container-fluid shadow-sm">
+        <footer class="d-flex flex-wrap justify-content-between align-items-center pt-3 pb-2 my-1 border-top">
+            <p class="col-4 mb-0 ps-2 text-color-change">&copy; 2023 Cookez, Inc</p>
+
+            <a href="/" class="col-4 text-center">
+                <img class="img-fluid" style="width: 60px; height: 60px;" src="~/images/logo.png" />
+            </a>
+
+            <ul class="nav col-4 justify-content-end text-color-change pe-5">
+                <li class="nav-item"><a asp-action="Privacy" asp-controller="Home" class="nav-dark px-2 text-color-change" target="_blank">Privacy</a></li>
+                <li class="nav-item"><a asp-action="Contact" asp-controller="Home" class="nav-dark px-2 text-color-change" target="_blank">Contact us</a></li>
+            </ul>
+        </footer>
+    </div>
+    <!-- Footer -->
+    <script src="~/lib/jquery-3.7.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+    <script src="~/js/togglescript.js"></script>
+    <script>
+        $(function () {
+            $("#SearchString").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/UserRecipes/AutoComplete",
+                        type: "POST",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return item.name;
+                            }));
+                        },
+                        error: function (xhr, status, error) {
+                            alert("Error");
+                        },
+                        failure: function (response) {
+                            alert("Error");
+                        }
+                    });
+                },
+                select: function (e, i) {
+                    $("#SearchString").val(i.item.val);
+                },
+                minLength: 1
+            })
+        });
+    </script>
+</body>
+</html>

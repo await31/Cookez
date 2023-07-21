@@ -1,0 +1,102 @@
+﻿.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    padding: 58px 0 0; /* Height of navbar */
+    box-shadow: 0 2px 5px 0 rgb(0 0 0 / 5%), 0 2px 10px 0 rgb(0 0 0 / 5%);
+    width: 15%;
+    z-index: 600;
+}
+
+@media (max-width: 991.98px) {
+    .sidebar {
+        width: 100%;
+    }
+}
+
+.sidebar .active {
+    border-radius: 5px;
+    box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
+}
+
+.sidebar-sticky {
+    position: relative;
+    top: 0;
+    height: calc(100vh - 48px);
+    padding-top: 0.5rem;
+    overflow-x: hidden;
+    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+}
+
+ul {
+    list-style: none;
+}
+
+.border-left-primary {
+    border-left: .25rem solid #4e73df !important
+}
+
+.border-bottom-primary {
+    border-bottom: .25rem solid #4e73df !important
+}
+
+.border-left-secondary {
+    border-left: .25rem solid #858796 !important
+}
+
+.border-bottom-secondary {
+    border-bottom: .25rem solid #858796 !important
+}
+
+.border-left-success {
+    border-left: .25rem solid #1cc88a !important
+}
+
+.border-bottom-success {
+    border-bottom: .25rem solid #1cc88a !important
+}
+
+.border-left-info {
+    border-left: .25rem solid #36b9cc !important
+}
+
+.border-bottom-info {
+    border-bottom: .25rem solid #36b9cc !important
+}
+
+.border-left-warning {
+    border-left: .25rem solid #f6c23e !important
+}
+
+.border-bottom-warning {
+    border-bottom: .25rem solid #f6c23e !important
+}
+
+.border-left-danger {
+    border-left: .25rem solid #e74a3b !important
+}
+
+.border-bottom-danger {
+    border-bottom: .25rem solid #e74a3b !important
+}
+
+.border-left-light {
+    border-left: .25rem solid #f8f9fc !important
+}
+
+.border-bottom-light {
+    border-bottom: .25rem solid #f8f9fc !important
+}
+
+.border-left-dark {
+    border-left: .25rem solid #5a5c69 !important
+}
+
+.border-bottom-dark {
+    border-bottom: .25rem solid #5a5c69 !important
+}
+
+.text-xs {
+    font-size: .7rem
+}

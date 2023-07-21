@@ -1,0 +1,32 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model IEnumerable<IdentityRole>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="container-fluid">
+    <div class="px-0">
+        <br />
+        <div class="col-5">
+            <a asp-action="Create" class="btn btn-success fw-bold text-light mt-2"><i class="fa-solid fa-folder-plus"></i> New Role</a>
+        </div>
+        <br />
+        <table class="table table-bordered table-striped w-100">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>@Html.DisplayNameFor(model=>model.Name)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var obj in Model) {
+                    <tr>
+                        <td class="w-25">@Html.DisplayFor(modelObj=>obj.Id)</td>
+                        <td class="w-25">@Html.DisplayFor(modelObj=>obj.Name)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

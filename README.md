@@ -46,4 +46,3 @@
 ## License
 ## Screenshots
 ### Home Screen
-![Home Screen](https://github.com/bankhoagiauten/Recipe-Organizer/blob/master/screenshots/HomeScreen.jpg)
